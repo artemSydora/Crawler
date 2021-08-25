@@ -1,8 +1,7 @@
 using System;
 using Xunit;
-using Crawler.Logic.Website;
 
-namespace WebsitePerformanceTool.Tests
+namespace Crawler.Logic.Tests
 {
     public class VerifierTests
     {

@@ -13,7 +13,7 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact(Timeout = 1000)]
-        public void ReadRobots_ReturnCollectionOfValidUrls()
+        public void ReadRobots_ReturnCollectionOfValidUris()
         {
             //arrange
             var fakeRobotsTxt = @"User-agent: Googlebot
@@ -34,7 +34,7 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact(Timeout = 1000)]
-        public void ReadRobots_ShouldIgnoreUrlsPointsToArchives()
+        public void ReadRobots_ShouldIgnoreUrisPointsToArchives()
         {
             //arrange
             var fakeRobotsTxt = @"User-agent: Googlebot
@@ -54,7 +54,7 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact(Timeout = 1000)]
-        public void ReadRobots_ReturnCollectionOfUrlsOnlyWithXmlExtension()
+        public void ReadRobots_ReturnCollectionOfUrisOnlyWithXmlExtension()
         {
             //arrange
             var fakeRobotsTxt = @"User-agent: Googlebot
@@ -75,7 +75,7 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact(Timeout = 1000)]
-        public void ReadRobots_ReturnCollectionOfUrlsOnlyWithDns()
+        public void ReadRobots_ReturnCollectionOfUrisOnlyWithDns()
         {
             //arrange
             var fakeRobotsTxt = @"User-agent: Googlebot

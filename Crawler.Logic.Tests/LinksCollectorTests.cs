@@ -1,24 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Moq;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Moq;
-using Crawler.Logic.Crawlers.Website;
-using Crawler.Logic.Crawlers.Sitemap;
-using Crawler.Logic;
-using Crawler.Logic.Models;
 
-namespace WebsitePerformanceTool.Tests
+namespace Crawler.Logic.Tests
 {
     public class LinksCollectorTests
     {
-        private readonly Mock<CrawlerWebsite> _mockWebsiteCrawler;
-        private readonly Mock<CrawlerSitemap> _mockSitemapCrawler;
+        private readonly Mock<WebsiteCrawler> _mockWebsiteCrawler;
+        private readonly Mock<SitemapsCrawler> _mockSitemapCrawler;
         private readonly LinkCollector _linkCollector;
 
         public LinksCollectorTests()
         {
-            _mockWebsiteCrawler = new Mock<CrawlerWebsite>(null, null);
-            _mockSitemapCrawler = new Mock<CrawlerSitemap>(null, null, null);
+            _mockWebsiteCrawler = new Mock<WebsiteCrawler>(null, null);
+            _mockSitemapCrawler = new Mock<SitemapsCrawler>(null, null, null);
             _linkCollector = new LinkCollector(_mockWebsiteCrawler.Object, _mockSitemapCrawler.Object);
         }
 
@@ -28,14 +25,14 @@ namespace WebsitePerformanceTool.Tests
             //arrange
             var fakeUrl = "http://www.example.com";
 
-            IEnumerable<string> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
-            IEnumerable<string> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
+            IEnumerable<Uri> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
+            IEnumerable<Uri> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
 
             Link[] expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
@@ -55,14 +52,14 @@ namespace WebsitePerformanceTool.Tests
             //arrange
             var fakeUrl = "http://www.example.com";
 
-            IEnumerable<string> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
-            IEnumerable<string> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
+            IEnumerable<Uri> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
+            IEnumerable<Uri> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
 
             IEnumerable<Link> expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
@@ -70,9 +67,9 @@ namespace WebsitePerformanceTool.Tests
 
             //assert
             Assert.Collection(actual,
-                              link => Assert.True(link.IsFromSitemap),
-                              link => Assert.True(link.IsFromSitemap),
-                              link => Assert.False(link.IsFromSitemap));
+                              link => Assert.True(link.InSitemap),
+                              link => Assert.True(link.InSitemap),
+                              link => Assert.False(link.InSitemap));
         }
 
         [Fact(Timeout = 1000)]
@@ -81,14 +78,14 @@ namespace WebsitePerformanceTool.Tests
             //arrange
             var fakeUrl = "http://www.example.com";
 
-            IEnumerable<string> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
-            IEnumerable<string> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
+            IEnumerable<Uri> fakeUrlsFromSitemap = GetFakeUrlsFromSitemap();
+            IEnumerable<Uri> fakeUrlsFromWebsite = GetFakeUrlsFromWebsite();
 
             IEnumerable<Link> expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrlsAsync(It.IsAny<string>()))
+            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
                                                 .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
@@ -97,9 +94,9 @@ namespace WebsitePerformanceTool.Tests
             //assert
 
             Assert.Collection(actual,
-                              link => Assert.True(link.IsFromWebsite),
-                              link => Assert.False(link.IsFromWebsite),
-                              link => Assert.True(link.IsFromWebsite));
+                              link => Assert.True(link.InWebsite),
+                              link => Assert.False(link.InWebsite),
+                              link => Assert.True(link.InWebsite));
         }
 
         #region FakeData
@@ -111,46 +108,46 @@ namespace WebsitePerformanceTool.Tests
                 new Link
                 {
                     Url = "http://www.example.com/",
-                    IsFromSitemap = true,
-                    IsFromWebsite = true
+                    InSitemap = true,
+                    InWebsite = true
                 },
                 new Link
                 {
                     Url = "http://www.example.com/About",
-                    IsFromSitemap = true,
-                    IsFromWebsite = false
+                    InSitemap = true,
+                    InWebsite = false
                 },
                 new Link
                 {
-                    Url = "http://www.example.com/Home/",
-                    IsFromSitemap = false,
-                    IsFromWebsite = true
+                    Url = "https://www.example.com/Home/",
+                    InSitemap = false,
+                    InWebsite = true
                 }
             };
 
             return expected;
         }
 
-        private IEnumerable<string> GetFakeUrlsFromSitemap()
+        private IEnumerable<Uri> GetFakeUrlsFromSitemap()
         {
-            var fakeUrlsFromSitemap = new[]
+            var fakeUrisFromSitemap = new[]
             {
-            "http://www.example.com/About",
-            "http://www.example.com/"
+            new Uri("http://www.example.com/About"),
+            new Uri("http://www.example.com/")
             };
 
-            return fakeUrlsFromSitemap;
+            return fakeUrisFromSitemap;
         }
 
-        private IEnumerable<string> GetFakeUrlsFromWebsite()
+        private IEnumerable<Uri> GetFakeUrlsFromWebsite()
         {
-            var fakeUrlsFromWebsite = new[]
+            var fakeUrisFromWebsite = new[]
             {
-            "http://www.example.com/Home/",
-            "http://www.example.com/"
+            new Uri("https://www.example.com/Home/"),
+            new Uri("https://www.example.com/")
             };
 
-            return fakeUrlsFromWebsite;
+            return fakeUrisFromWebsite;
         }
 
         #endregion

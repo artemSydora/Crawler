@@ -6,18 +6,18 @@ namespace Crawler.Logic
     {
         public string Url { get; set; }
 
-        public int ResponseTime { get; set; }
+        public int ResponseTimeMs { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is Ping ping &&
                    Url == ping.Url &&
-                   ResponseTime == ping.ResponseTime;
+                   ResponseTimeMs == ping.ResponseTimeMs;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Url, ResponseTime);
+            return HashCode.Combine(Url, ResponseTimeMs);
         }
     }
 }

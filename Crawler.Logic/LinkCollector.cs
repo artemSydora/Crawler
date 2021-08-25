@@ -29,30 +29,30 @@ namespace Crawler.Logic
         private IEnumerable<Link> MergeLinks(IEnumerable<Uri> urlsFromWebsite, IEnumerable<Uri> urlsFromSitemap, IEqualityComparer<Uri> comparer)
         {
             List<Link> allLinks = urlsFromSitemap
-                .Intersect(urlsFromWebsite)
+                .Intersect(urlsFromWebsite, comparer)
                 .Select(uri => new Link
                 {
-                    IsFromSitemap = true,
-                    IsFromWebsite = true,
+                    InSitemap = true,
+                    InWebsite = true,
                     Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
                 })
                 .ToList();
 
             allLinks.AddRange(urlsFromSitemap
-                .Except(urlsFromWebsite)
+                .Except(urlsFromWebsite, comparer)
                 .Select(uri => new Link
                 {
-                    IsFromSitemap = true,
-                    IsFromWebsite = false,
+                    InSitemap = true,
+                    InWebsite = false,
                     Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
                 }));
 
             allLinks.AddRange(urlsFromWebsite
-                .Except(urlsFromSitemap)
+                .Except(urlsFromSitemap, comparer)
                 .Select(uri => new Link
                 {
-                    IsFromSitemap = false,
-                    IsFromWebsite = true,
+                    InSitemap = false,
+                    InWebsite = true,
                     Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
                 }));
 

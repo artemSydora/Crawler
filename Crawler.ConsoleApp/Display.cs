@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using ConsoleTables;
+using Crawler.Logic;
+using System.Collections.Generic;
 using System.Linq;
-using ConsoleTables;
-using Crawler.Logic.Models;
 
 namespace Crawler.ConsoleApp
 {
-    class Display
+    public class Display
     {
         private readonly ConsoleWrapper _consoleWrapper;
 
@@ -39,7 +39,7 @@ namespace Crawler.ConsoleApp
             table.Options.EnableCount = false;
 
             pings.ToList()
-                 .ForEach(link => table.AddRow($"{ count++,4}) {link.Url}", $"{link.ResponseTime} ms."));
+                 .ForEach(link => table.AddRow($"{ count++,4}) {link.Url}", $"{link.ResponseTimeMs} ms."));
 
             table.Write();
         }

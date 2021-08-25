@@ -4,23 +4,23 @@ namespace Crawler.Logic
 {
     public class Link
     {
-        public bool IsFromSitemap { get; set; }
+        public bool InSitemap { get; set; }
 
-        public bool IsFromWebsite { get; set; }
+        public bool InWebsite { get; set; }
 
         public string Url { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is Link link &&
-                   IsFromSitemap == link.IsFromSitemap &&
-                   IsFromWebsite == link.IsFromWebsite &&
+                   InSitemap == link.InSitemap &&
+                   InWebsite == link.InWebsite &&
                    Url == link.Url;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(IsFromSitemap, IsFromWebsite, Url);
+            return HashCode.Combine(InSitemap, InWebsite, Url);
         }
     }
 }

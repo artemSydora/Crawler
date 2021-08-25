@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Crawler.Entities;
-using Crawler.Logic;
 
 namespace Crawler.Logic
 {
@@ -29,7 +28,7 @@ namespace Crawler.Logic
                     ResponseTime = pings.SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
                 })
                 .ToList();
-            
+
             await _repository.AddAsync(new Test
             {
                 HomePageUrl = homePageUrl,

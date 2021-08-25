@@ -2,7 +2,7 @@
 
 namespace Crawler.ConsoleApp
 {
-    class ConsoleWrapper
+    public class ConsoleWrapper
     {
         public virtual string ReadLine()
         {
