@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Reflection;
 using Crawler.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Crawler.Repository
 {
@@ -14,9 +12,9 @@ namespace Crawler.Repository
             Database.Migrate();
         }
 
-        DbSet<Test> Tests { get; set; }
+        public DbSet<Test> Tests { get; set; }
 
-        DbSet<MeasuredLink> LinkPerformanceResults { get; set; }
+        public DbSet<MeasuredLink> LinkPerformanceResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
