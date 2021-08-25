@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Crawler.Logic.Crawlers.Sitemap;
-using Crawler.Logic.Crawlers.Website;
-using Crawler.Logic.Models;
 
 namespace Crawler.Logic
 {
     public class LinkCollector
     {
-        private readonly CrawlerWebsite _websiteCrawler;
-        private readonly CrawlerSitemap _sitemapCrawler;
+        private readonly WebsiteCrawler _websiteCrawler;
+        private readonly SitemapsCrawler _sitemapCrawler;
 
-        public LinkCollector(CrawlerWebsite websiteCrawler, CrawlerSitemap sitemapCrawler)
+        public LinkCollector(WebsiteCrawler websiteCrawler, SitemapsCrawler sitemapCrawler)
         {
             _websiteCrawler = websiteCrawler;
             _sitemapCrawler = sitemapCrawler;
@@ -20,40 +18,43 @@ namespace Crawler.Logic
 
         public virtual async Task<IEnumerable<Link>> CollectAllLinksAsync(string homePageUrl)
         {
-            IEnumerable<string> urlsFromSitemap = await _sitemapCrawler.GetUrlsAsync(homePageUrl);
-            IEnumerable<string> urlsFromWebsite = await _websiteCrawler.GetUrlsAsync(homePageUrl);
+            IEnumerable<Uri> urlsFromSitemap = await _sitemapCrawler.GetUrisAsync(homePageUrl);
+            IEnumerable<Uri> urlsFromWebsite = await _websiteCrawler.GetUrisAsync(homePageUrl);
 
-            var allLinks = MergeLinks(urlsFromWebsite, urlsFromSitemap);
+            var allLinks = MergeLinks(urlsFromWebsite, urlsFromSitemap, new CustomUriComparer());
 
             return allLinks;
         }
 
-        private IEnumerable<Link> MergeLinks(IEnumerable<string> urlsFromWebsite, IEnumerable<string> urlsFromSitemap)
+        private IEnumerable<Link> MergeLinks(IEnumerable<Uri> urlsFromWebsite, IEnumerable<Uri> urlsFromSitemap, IEqualityComparer<Uri> comparer)
         {
-            List<Link> allLinks = urlsFromSitemap.Intersect(urlsFromWebsite)
-                                                .Select(s => new Link
-                                                {
-                                                    IsFromSitemap = true,
-                                                    IsFromWebsite = true,
-                                                    Url = s
-                                                })
-                                                .ToList();
+            List<Link> allLinks = urlsFromSitemap
+                .Intersect(urlsFromWebsite)
+                .Select(uri => new Link
+                {
+                    IsFromSitemap = true,
+                    IsFromWebsite = true,
+                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
+                })
+                .ToList();
 
-            allLinks.AddRange(urlsFromSitemap.Except(urlsFromWebsite)
-                                             .Select(s => new Link
-                                             {
-                                                 IsFromSitemap = true,
-                                                 IsFromWebsite = false,
-                                                 Url = s
-                                             }));
+            allLinks.AddRange(urlsFromSitemap
+                .Except(urlsFromWebsite)
+                .Select(uri => new Link
+                {
+                    IsFromSitemap = true,
+                    IsFromWebsite = false,
+                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
+                }));
 
-            allLinks.AddRange(urlsFromWebsite.Except(urlsFromSitemap)
-                                             .Select(s => new Link
-                                             {
-                                                 IsFromSitemap = false,
-                                                 IsFromWebsite = true,
-                                                 Url = s
-                                             }));
+            allLinks.AddRange(urlsFromWebsite
+                .Except(urlsFromSitemap)
+                .Select(uri => new Link
+                {
+                    IsFromSitemap = false,
+                    IsFromWebsite = true,
+                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
+                }));
 
             return allLinks;
         }

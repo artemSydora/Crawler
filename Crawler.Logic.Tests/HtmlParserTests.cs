@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Moq;
+using System;
 using Xunit;
-using Moq;
-using Crawler.Logic.Crawlers.Website;
-using Crawler.Logic.Website;
 
-namespace WebsitePerformanceTool.Tests
+namespace Crawler.Logic.Tests
 {
-    public class ParserHtmlTests
+    public class HtmlParserTests
     {
         private readonly Mock<Verifier> _mockUrlVerifier;
-        private readonly ParserHtml _htmlPageParser;
+        private readonly HtmlParser _htmlPageParser;
 
-        public ParserHtmlTests()
+        public HtmlParserTests()
         {
             _mockUrlVerifier = new Mock<Verifier>();
-            _htmlPageParser = new ParserHtml(_mockUrlVerifier.Object);
+            _htmlPageParser = new HtmlParser(_mockUrlVerifier.Object);
         }
 
         [Fact(Timeout = 1000)]

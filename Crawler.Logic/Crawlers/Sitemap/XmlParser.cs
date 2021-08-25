@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Crawler.Logic.Crawlers.Sitemap
+namespace Crawler.Logic
 {
-    public class ParserXml
+    public class XmlParser
     {
         internal enum ParsingOptions
         {
@@ -12,11 +12,11 @@ namespace Crawler.Logic.Crawlers.Sitemap
             Sitemap
         }
 
-        internal virtual IEnumerable<string> ParseDocument(string content, ParsingOptions options)
+        internal virtual IEnumerable<Uri> ParseDocument(string content, ParsingOptions options)
         {
             if (String.IsNullOrEmpty(content))
             {
-                return Array.Empty<string>();
+                return Array.Empty<Uri>();
             }
 
             var tagName = String.Empty;
@@ -32,7 +32,7 @@ namespace Crawler.Logic.Crawlers.Sitemap
                     break;
             }
 
-            var urls = new List<string>();
+            var urls = new List<Uri>();
 
             var document = XDocument.Parse(content);
 
@@ -47,15 +47,15 @@ namespace Crawler.Logic.Crawlers.Sitemap
             return urls;
         }
 
-        private IEnumerable<string> ParseElements(IEnumerable<XElement> elements)
+        private IEnumerable<Uri> ParseElements(IEnumerable<XElement> elements)
         {
-            var urls = new List<string>();
+            var urls = new List<Uri>();
 
             foreach (var loc in elements)
             {
                 if (loc.Name.LocalName.Contains("loc"))
                 {
-                    urls.Add(loc.Value);
+                    urls.Add(new Uri(loc.Value));
                 }
             }
 

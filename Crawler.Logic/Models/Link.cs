@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crawler.Logic.Models
+namespace Crawler.Logic
 {
     public class Link
     {

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Crawler.Logic.Crawlers.Sitemap
+namespace Crawler.Logic
 {
-    public class ParserRobots
+    public class RobotsParser
     {
-        internal virtual IEnumerable<string> ReadRobots(string content)
+        internal virtual IEnumerable<Uri> ReadRobots(string content)
         {
             if (string.IsNullOrEmpty(content))
             {
-                return Array.Empty<string>();
+                return Array.Empty<Uri>();
             }
 
-            var result = new List<string>();
+            var result = new List<Uri>();
 
             var lines = content.Split('\n');
 
@@ -29,7 +29,7 @@ namespace Crawler.Logic.Crawlers.Sitemap
 
                         if(IsUri)
                         {
-                            result.Add(sitemapUri.ToString());
+                            result.Add(sitemapUri);
                         }
                     }
                 }

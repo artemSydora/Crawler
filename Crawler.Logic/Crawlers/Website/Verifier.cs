@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crawler.Logic.Website
+namespace Crawler.Logic
 {
     public class Verifier
     {

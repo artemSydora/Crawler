@@ -1,16 +1,15 @@
-﻿using Crawler.Logic.Crawlers.Sitemap;
-using System;
+﻿using System;
 using Xunit;
 
-namespace WebsitePerformanceTool.Tests
+namespace Crawler.Logic.Tests
 {
-    public class ParserRobotsTests
+    public class RobotsParserTests
     {
-        private readonly ParserRobots _robotsParser;
+        private readonly RobotsParser _robotsParser;
 
-        public ParserRobotsTests()
+        public RobotsParserTests()
         {
-            _robotsParser = new ParserRobots();
+            _robotsParser = new RobotsParser();
         }
 
         [Fact(Timeout = 1000)]
@@ -30,8 +29,8 @@ namespace WebsitePerformanceTool.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal("http://www.example.com/sitemap1.xml", url),
-                              url => Assert.Equal("http://www.example.com/sitemap2.xml", url));
+                              url => Assert.Equal(new Uri("http://www.example.com/sitemap1.xml"), url),
+                              url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -51,7 +50,7 @@ namespace WebsitePerformanceTool.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal("http://www.example.com/sitemap2.xml", url));
+                              url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -72,7 +71,7 @@ namespace WebsitePerformanceTool.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal("http://www.example.com/sitemap3.xml", url));
+                              url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -93,7 +92,7 @@ namespace WebsitePerformanceTool.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal("http://www.example.com/sitemap3.xml", url));
+                              url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
