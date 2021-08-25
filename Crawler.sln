@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Logic", "Crawler.Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Logic.Tests", "Crawler.Logic.Tests\Crawler.Logic.Tests.csproj", "{63CBDFE5-C6DD-44CB-B051-090B5BB2132C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Entities", "Crawler.Entities\Crawler.Entities.csproj", "{03D4949F-B76A-485B-BED9-2FCCD37255B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Repository", "Crawler.Repository\Crawler.Repository.csproj", "{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{63CBDFE5-C6DD-44CB-B051-090B5BB2132C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63CBDFE5-C6DD-44CB-B051-090B5BB2132C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63CBDFE5-C6DD-44CB-B051-090B5BB2132C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D4949F-B76A-485B-BED9-2FCCD37255B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D4949F-B76A-485B-BED9-2FCCD37255B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D4949F-B76A-485B-BED9-2FCCD37255B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D4949F-B76A-485B-BED9-2FCCD37255B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
