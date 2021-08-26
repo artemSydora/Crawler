@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Crawler.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Crawler.Entities;
 
 namespace Crawler.Repository
 {
-    class TestConfiguration : IEntityTypeConfiguration<Test>
+    public class TestConfiguration : IEntityTypeConfiguration<Test>
     {
         public void Configure(EntityTypeBuilder<Test> builder)
         {

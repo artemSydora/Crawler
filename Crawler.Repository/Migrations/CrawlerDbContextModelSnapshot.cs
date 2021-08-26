@@ -32,7 +32,7 @@ namespace Crawler.Repository.Migrations
                     b.Property<bool>("InWebsite")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ResponseTime")
+                    b.Property<int>("ResponseTimeMs")
                         .HasColumnType("int");
 
                     b.Property<int?>("TestId")
@@ -62,8 +62,8 @@ namespace Crawler.Repository.Migrations
 
                     b.Property<string>("HomePageUrl")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

@@ -12,6 +12,6 @@ namespace Crawler.Entities
 
         public bool InWebsite { get; set; }
 
-        public int ResponseTime { get; set; }
+        public int ResponseTimeMs { get; set; }
     }
 }

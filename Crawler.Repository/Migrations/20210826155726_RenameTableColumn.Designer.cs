@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Crawler.Repository.Migrations
 {
     [DbContext(typeof(CrawlerDbContext))]
-    [Migration("20210824162902_InitialCrawlerDB")]
-    partial class InitialCrawlerDB
+    [Migration("20210826155726_RenameTableColumn")]
+    partial class RenameTableColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,7 +34,7 @@ namespace Crawler.Repository.Migrations
                     b.Property<bool>("InWebsite")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ResponseTime")
+                    b.Property<int>("ResponseTimeMs")
                         .HasColumnType("int");
 
                     b.Property<int?>("TestId")
@@ -64,8 +64,8 @@ namespace Crawler.Repository.Migrations
 
                     b.Property<string>("HomePageUrl")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

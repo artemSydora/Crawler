@@ -38,15 +38,15 @@ namespace Crawler.ConsoleApp
                     IEnumerable<Link> links = await _linkCollector.CollectAllLinksAsync(homePageUrl);
                     IEnumerable<Ping> pings = await _pingCollector.MeasureLinksAsync(links);
 
-                    await _linkService.SaveMeasuredLinks(homePageUrl, links, pings);
+                    await _linkService.AddTestResultsAsync(homePageUrl, links, pings);
                     
-                    IEnumerable<Link> uniqueUrlsFromSitemap = _linkService.GetLinksFromSitemapByHomePageUrl(homePageUrl);
-                    IEnumerable<Link> uniqueUrlsFromWebsite = _linkService.GetLinksFromWebsiteByHomePageUrl(homePageUrl);
+                    IEnumerable<Link> uniqueUrlsFromSitemap = _linkService.GetUniqueSitemapLinksByUrl(homePageUrl);
+                    IEnumerable<Link> uniqueUrlsFromWebsite = _linkService.GetUniqueWebsiteLinksByUrl(homePageUrl);
 
                     _display.ShowTable("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", uniqueUrlsFromSitemap, "URL");
                     _display.ShowTable("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", uniqueUrlsFromWebsite, "URL");
 
-                    IEnumerable<Ping> pingsInDb = _linkService.GetPingsByHomePageUrlOrderByPing(homePageUrl);
+                    IEnumerable<Ping> pingsInDb = _linkService.GetPingsByUrlOrderByPing(homePageUrl);
 
                     _display.ShowTable("Timing", pingsInDb, "URL", "Timing");
 
@@ -80,7 +80,7 @@ namespace Crawler.ConsoleApp
                 throw new ArgumentException();
             }
 
-            var homePageUrl = new Uri($"https://{result.Host}").ToString();
+            var homePageUrl = new Uri($"{result.Scheme}://{result.Host}").ToString();
 
             return homePageUrl;
         }
