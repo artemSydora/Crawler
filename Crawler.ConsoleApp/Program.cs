@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Crawler.Logic;
 using Crawler.Repository;
 
@@ -17,9 +18,9 @@ namespace Crawler.ConsoleApp
         {
             using var host = CreateHostBuilder(args).Build();
 
-            var crawlerWorker = host.Services.GetRequiredService<ConsoleApp>();
-
-            await crawlerWorker.Run();
+            var consoleApp = host.Services.GetRequiredService<ConsoleApp>();
+            
+            await consoleApp.Run();
             await host.RunAsync();
         }
 
@@ -27,9 +28,10 @@ namespace Crawler.ConsoleApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddScoped<RepositoryDataAccess>();
                     services.AddEfRepository<CrawlerDbContext>(options =>
                     {
-                        options.UseSqlServer(@"Data Source=WONDERWAFFEL\SQLEXPRESS;Initial Catalog=CrawlerDB; Integrated Security = True");
+                        options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString"));
                     });
 
                     services.AddScoped<LinkService>();
@@ -50,6 +52,7 @@ namespace Crawler.ConsoleApp
                     services.AddScoped<ConsoleApp>();
                     services.AddScoped<Display>();
                     services.AddScoped<ConsoleWrapper>();
-                }).ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
+                })
+                .ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
     }
 }

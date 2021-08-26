@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Crawler.ConsoleApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ConnectionString": "Data Source=WONDERWAFFEL\\SQLEXPRESS;Initial Catalog=CrawlerDB; Integrated Security = True"
+      }
+    }
+  }
+}
