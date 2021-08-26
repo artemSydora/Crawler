@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Crawler.Entities;
+using Crawler.Repository;
 
 namespace Crawler.Logic
 {
     public class LinkService
     {
-        private readonly IRepository<Test> _repository;
+        private readonly RepositoryDataAccess _repositoryDataAccess;
 
-        public LinkService(IRepository<Test> repository)
+        public LinkService(RepositoryDataAccess repositoryDataAccess)
         {
-            _repository = repository;
+            _repositoryDataAccess = repositoryDataAccess;
         }
 
-        public async Task SaveMeasuredLinks(string homePageUrl, IEnumerable<Link> links, IEnumerable<Ping> pings)
+        public async Task AddTestResultsAsync(string homePageUrl, IEnumerable<Link> links, IEnumerable<Ping> pings)
         {
 
             var measuredLinks = links
@@ -25,52 +25,31 @@ namespace Crawler.Logic
                     InSitemap = link.InSitemap,
                     InWebsite = link.InWebsite,
                     Url = link.Url,
-                    ResponseTime = pings.SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
+                    ResponseTimeMs = pings.SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
                 })
                 .ToList();
 
-            await _repository.AddAsync(new Test
-            {
-                HomePageUrl = homePageUrl,
-                DateTime = DateTime.Now,
-                MeasuredLinks = measuredLinks
-            });
-
-            await _repository.SaveChangesAsync();
+            await _repositoryDataAccess.SaveTestResultAsync(homePageUrl, measuredLinks);
         }
 
-        public IEnumerable<Ping> GetPingsByHomePageUrlOrderByPing(string homePageUrl)
+        public IEnumerable<Ping> GetPingsByUrlOrderByPing(string homePageUrl)
         {
-            var pings = _repository
-                .Include(t => t.MeasuredLinks)
-                .OrderBy(t => t.Id)
-                .LastOrDefault(t => t.HomePageUrl == homePageUrl)
-                .MeasuredLinks.Select(ml => new Ping
+            var pings = _repositoryDataAccess
+                .GetTestsByHomePageUrl(homePageUrl)
+                .MeasuredLinks
+                .Select(ml => new Ping
                 {
                     Url = ml.Url,
-                    ResponseTimeMs = ml.ResponseTime
+                    ResponseTimeMs = ml.ResponseTimeMs
                 });
 
             return pings.OrderBy(p => p.ResponseTimeMs);
         }
 
-        public IEnumerable<Link> GetAllLinksByHomePageUrl(string homePageUrl)
+        public IEnumerable<Link> GetUniqueSitemapLinksByUrl(string homePageUrl)
         {
-            var links = _repository
-                .Include(t => t.MeasuredLinks)
-                .OrderBy(t => t.Id)
-                .LastOrDefault(t => t.HomePageUrl == homePageUrl)
-                .MeasuredLinks.Select(ml => LinkFromMeasuredLink(ml));
-
-            return links;
-        }
-
-        public IEnumerable<Link> GetLinksFromSitemapByHomePageUrl(string homePageUrl)
-        {
-            var links = _repository
-                .Include(t => t.MeasuredLinks)
-                .OrderBy(t => t.Id)
-                .LastOrDefault(t => t.HomePageUrl == homePageUrl)
+            var links = _repositoryDataAccess
+                .GetTestsByHomePageUrl(homePageUrl)
                 .MeasuredLinks
                 .Where(ml => ml.InSitemap && !ml.InWebsite)
                 .Select(ml => LinkFromMeasuredLink(ml));
@@ -78,12 +57,10 @@ namespace Crawler.Logic
             return links;
         }
 
-        public IEnumerable<Link> GetLinksFromWebsiteByHomePageUrl(string homePageUrl)
+        public IEnumerable<Link> GetUniqueWebsiteLinksByUrl(string homePageUrl)
         {
-            var links = _repository
-                .Include(t => t.MeasuredLinks)
-                .OrderBy(t => t.Id)
-                .LastOrDefault(t => t.HomePageUrl == homePageUrl)
+            var links = _repositoryDataAccess
+                .GetTestsByHomePageUrl(homePageUrl)
                 .MeasuredLinks
                 .Where(l => !l.InSitemap && l.InWebsite)
                 .Select(ml => LinkFromMeasuredLink(ml));
