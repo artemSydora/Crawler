@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Crawler.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Crawler.Entities;
 
 namespace Crawler.Repository
 {
@@ -10,7 +10,7 @@ namespace Crawler.Repository
         {
             builder.Property(ml => ml.Url)
                    .HasMaxLength(2048)
-                   .IsRequired(true);
+                   .IsRequired();
         }
     }
 }

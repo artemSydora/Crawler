@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Crawler.Logic
+namespace Crawler.Logic.Crawlers.Sitemap
 {
     public class RobotsParser
     {
-        internal virtual IEnumerable<Uri> ReadRobots(string content)
+        public virtual IEnumerable<Uri> ReadRobots(string content)
         {
             if (string.IsNullOrEmpty(content))
             {
@@ -20,14 +20,14 @@ namespace Crawler.Logic
             {
                 if (line.Contains("Sitemap:"))
                 {
-                    foreach (var item in line.Split(" ",StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var item in line.Split(" ", StringSplitOptions.RemoveEmptyEntries))
                     {
                         var IsUri = Uri.TryCreate(item, UriKind.Absolute, out Uri sitemapUri)
                             && sitemapUri.HostNameType == UriHostNameType.Dns
                             && sitemapUri.AbsolutePath.Contains(".xml")
                             && !sitemapUri.AbsolutePath.Contains("archive");
 
-                        if(IsUri)
+                        if (IsUri)
                         {
                             result.Add(sitemapUri);
                         }

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using Crawler.Logic;
+using Crawler.Logic.Crawlers.Sitemap;
+using Crawler.Logic.Crawlers.Website;
+using Crawler.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Crawler.Logic;
-using Crawler.Repository;
+using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace Crawler.ConsoleApp
 {
@@ -19,7 +21,7 @@ namespace Crawler.ConsoleApp
             using var host = CreateHostBuilder(args).Build();
 
             var consoleApp = host.Services.GetRequiredService<ConsoleApp>();
-            
+
             await consoleApp.Run();
             await host.RunAsync();
         }
@@ -28,7 +30,7 @@ namespace Crawler.ConsoleApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddScoped<RepositoryDataAccess>();
+                    services.AddScoped<DataAccess>();
                     services.AddEfRepository<CrawlerDbContext>(options =>
                     {
                         options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString"));
@@ -38,8 +40,8 @@ namespace Crawler.ConsoleApp
                     services.AddScoped<WebsiteCrawler>();
                     services.AddScoped<SitemapsCrawler>();
                     services.AddScoped<LinkCollector>();
-                    services.AddScoped<XmlParser>();
-                    services.AddScoped<HtmlParser>();
+                    services.AddScoped<XmlDocParser>();
+                    services.AddScoped<HtmlDocParser>();
                     services.AddScoped<RobotsParser>();
                     services.AddScoped<Verifier>();
                     services.AddSingleton<ContentLoader>();

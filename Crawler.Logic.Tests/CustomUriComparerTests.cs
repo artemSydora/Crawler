@@ -13,7 +13,7 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact]
-        public void Equals_ShouldIgnoreSchemeWhenConparedUri()
+        public void Equals_ShouldIgnoreSchemeWhenConpareUri()
         {
             //arrange
             var fakeUri1 = new Uri("http://www.example.com");

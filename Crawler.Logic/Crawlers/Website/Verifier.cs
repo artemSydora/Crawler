@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Crawler.Logic
+namespace Crawler.Logic.Crawlers.Website
 {
     public class Verifier
     {
-        internal virtual bool VerifyUrl(Uri baseUri, string path)
+        public virtual bool VerifyUri(Uri baseUri, string path)
         {
             var isWellFormedRelativeUri = Uri.TryCreate(path, UriKind.RelativeOrAbsolute, out Uri pathUri);
 
@@ -30,16 +30,7 @@ namespace Crawler.Logic
 
         private bool VerifyAbsoluteUri(Uri absoluteUri)
         {
-            var verifyResult = true;
-
-            var isPointsToHtml = !absoluteUri.AbsolutePath.Substring(absoluteUri.AbsolutePath.LastIndexOf("/")).Contains(".")
-                                 || String.Equals(absoluteUri.AbsolutePath.Substring(absoluteUri.AbsolutePath.LastIndexOf(".")), ".html", StringComparison.OrdinalIgnoreCase)
-                                 || String.Equals(absoluteUri.AbsolutePath.Substring(absoluteUri.AbsolutePath.LastIndexOf(".")), ".htm", StringComparison.OrdinalIgnoreCase);
-
-            if (!isPointsToHtml)
-            {
-                verifyResult = false;
-            }
+            var verifyResult = VerifyUrlPointsToHtml(absoluteUri);
 
             if (!String.IsNullOrEmpty(absoluteUri.Fragment))
             {
@@ -66,6 +57,23 @@ namespace Crawler.Logic
             var verifyResult = VerifyAbsoluteUri(absoluteUri);
 
             return verifyResult;
+        }
+
+        private bool VerifyUrlPointsToHtml(Uri absoluteUri)
+        {
+            var urlEndContainsDot = absoluteUri.AbsolutePath.Substring(absoluteUri.AbsolutePath.LastIndexOf("/")).Contains(".");
+
+            if (urlEndContainsDot)
+            {
+                var path = absoluteUri.AbsolutePath;
+
+                var urlEndsWithHtml = String.Equals(path.Substring(path.LastIndexOf(".")), ".html", StringComparison.OrdinalIgnoreCase);
+                var urlEndsWithHtm = String.Equals(path.Substring(path.LastIndexOf(".")), ".htm", StringComparison.OrdinalIgnoreCase);
+
+                return urlEndsWithHtml || urlEndsWithHtm;
+            }
+
+            return true;
         }
     }
 }

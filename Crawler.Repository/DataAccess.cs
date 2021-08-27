@@ -1,18 +1,18 @@
 ﻿using Crawler.Entities;
+using Crawler.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Crawler.Repository
 {
-    public class RepositoryDataAccess
+    public class DataAccess
     {
         private readonly IRepository<Test> _repository;
 
-        public RepositoryDataAccess(IRepository<Test> repository)
+        public DataAccess(IRepository<Test> repository)
         {
             _repository = repository;
         }
@@ -27,6 +27,15 @@ namespace Crawler.Repository
             });
 
             await _repository.SaveChangesAsync();
+        }
+
+        public virtual IEnumerable<int> GetAllTestIds()
+        {
+            var allIds = _repository.GetAll()
+                .Select(t => t.Id)
+                .OrderBy(i => i);
+
+            return allIds;
         }
 
         public virtual Test GetTestsByHomePageUrl(string homePageUrl)

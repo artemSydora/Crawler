@@ -8,7 +8,8 @@ namespace Crawler.Logic
     {
         public bool Equals(Uri x, Uri y)
         {
-            var result = Uri.Compare(x, y, UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
+            var result = Uri.Compare(x, y, UriComponents.Host | UriComponents.PathAndQuery, 
+                UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
 
             return result == 0;
         }

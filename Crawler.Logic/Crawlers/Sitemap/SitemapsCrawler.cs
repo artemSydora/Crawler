@@ -2,37 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Crawler.Logic.XmlParser;
+using static Crawler.Logic.Crawlers.Sitemap.XmlDocParser;
 
-namespace Crawler.Logic
+namespace Crawler.Logic.Crawlers.Sitemap
 {
     public class SitemapsCrawler
     {
         private readonly ContentLoader _contentLoader;
-        private readonly XmlParser _xmlPageParser;
+        private readonly XmlDocParser _xmlPageParser;
         private readonly RobotsParser _robotsParser;
 
-        public SitemapsCrawler(ContentLoader sourseLoader, XmlParser sitemapParser, RobotsParser robotsParser)
+        public SitemapsCrawler(ContentLoader sourseLoader, XmlDocParser sitemapParser, RobotsParser robotsParser)
         {
             _contentLoader = sourseLoader;
             _xmlPageParser = sitemapParser;
             _robotsParser = robotsParser;
         }
 
-        internal virtual async Task<IEnumerable<Uri>> GetUrisAsync(string url)
+        public virtual async Task<IEnumerable<Uri>> GetUrisAsync(string url)
         {
-            var urlsFromSitemaps = new List<Uri>();
+            var urisFromSitemaps = new List<Uri>();
 
-            foreach (var sitemapUri in await GetSitemapsUrliAsync(url))
+            foreach (var sitemapUri in await GetSitemapsUrisAsync(url))
             {
                 string content = await _contentLoader.GetContentAsync(sitemapUri.AbsoluteUri);
 
                 IEnumerable<Uri> uris = _xmlPageParser.ParseDocument(content, ParsingOptions.Sitemap);
 
-                urlsFromSitemaps.AddRange(uris);
+                urisFromSitemaps.AddRange(uris);
             }
 
-            return urlsFromSitemaps.ToHashSet();
+            return urisFromSitemaps.ToHashSet();
         }
 
         private async Task<IEnumerable<Uri>> ParseRobotsAsync(string url)
@@ -46,9 +46,9 @@ namespace Crawler.Logic
             return urisFromRobots;
         }
 
-        private async Task<IEnumerable<Uri>> GetSitemapsUrliAsync(string url)
+        private async Task<IEnumerable<Uri>> GetSitemapsUrisAsync(string url)
         {
-            var sitemaps = new List<Uri>();
+            var sitemapsUris = new List<Uri>();
 
             foreach (var uriFromRobots in await ParseRobotsAsync(url))
             {
@@ -58,15 +58,15 @@ namespace Crawler.Logic
 
                 if (sitemapsFromSiteindex.Count() > 0)
                 {
-                    sitemaps.AddRange(sitemapsFromSiteindex);
+                    sitemapsUris.AddRange(sitemapsFromSiteindex);
                 }
                 else
                 {
-                    sitemaps.Add(uriFromRobots);
+                    sitemapsUris.Add(uriFromRobots);
                 }
             }
 
-            return sitemaps.ToHashSet();
+            return sitemapsUris.ToHashSet();
         }
     }
 }

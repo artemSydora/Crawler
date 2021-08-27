@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Crawler.Logic
+namespace Crawler.Logic.Crawlers.Sitemap
 {
-    public class XmlParser
+    public class XmlDocParser
     {
-        internal enum ParsingOptions
+        public enum ParsingOptions
         {
             Siteindex,
             Sitemap
         }
 
-        internal virtual IEnumerable<Uri> ParseDocument(string content, ParsingOptions options)
+        public virtual IEnumerable<Uri> ParseDocument(string content, ParsingOptions options)
         {
             if (String.IsNullOrEmpty(content))
             {
@@ -40,7 +40,9 @@ namespace Crawler.Logic
             {
                 if (url.Name.LocalName.Contains(tagName))
                 {
-                    urls.AddRange(ParseElements(url.Elements()));
+                    IEnumerable<Uri> elements = ParseElements(url.Elements());
+                    
+                    urls.AddRange(elements);
                 }
             }
 

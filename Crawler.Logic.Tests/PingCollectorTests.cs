@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Crawler.Logic.Models;
+using Moq;
 using System.Threading.Tasks;
 using Xunit;
 

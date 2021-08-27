@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Crawler.Entities.Models;
+using Crawler.Logic.Models;
+using Crawler.Repository;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Crawler.Entities;
-using Crawler.Repository;
 
 namespace Crawler.Logic
 {
     public class LinkService
     {
-        private readonly RepositoryDataAccess _repositoryDataAccess;
+        private readonly DataAccess _repositoryDataAccess;
 
-        public LinkService(RepositoryDataAccess repositoryDataAccess)
+        public LinkService(DataAccess repositoryDataAccess)
         {
             _repositoryDataAccess = repositoryDataAccess;
         }
@@ -26,8 +27,7 @@ namespace Crawler.Logic
                     InWebsite = link.InWebsite,
                     Url = link.Url,
                     ResponseTimeMs = pings.SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
-                })
-                .ToList();
+                });
 
             await _repositoryDataAccess.SaveTestResultAsync(homePageUrl, measuredLinks);
         }
@@ -67,7 +67,6 @@ namespace Crawler.Logic
 
             return links;
         }
-
         private Link LinkFromMeasuredLink(MeasuredLink measuredLink)
         {
             var link = new Link

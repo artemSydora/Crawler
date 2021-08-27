@@ -1,4 +1,7 @@
-﻿using Moq;
+﻿using Crawler.Logic.Crawlers.Sitemap;
+using Crawler.Logic.Crawlers.Website;
+using Crawler.Logic.Models;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,20 +33,21 @@ namespace Crawler.Logic.Tests
 
             Link[] expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromWebsite);
+            _mockSitemapCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromSitemap);
+            _mockWebsiteCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
             var actual = await _linkCollector.CollectAllLinksAsync(fakeUrl);
 
             //assert
             Assert.Collection(actual,
-                              link => Assert.Equal(expected[0], link),
-                              link => Assert.Equal(expected[1], link),
-                              link => Assert.Equal(expected[2], link)
-                              );
+                link => Assert.Equal(expected[0], link),
+                link => Assert.Equal(expected[1], link),
+                link => Assert.Equal(expected[2], link));
         }
 
         [Fact(Timeout = 1000)]
@@ -57,19 +61,21 @@ namespace Crawler.Logic.Tests
 
             IEnumerable<Link> expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromWebsite);
+            _mockSitemapCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromSitemap);
+            _mockWebsiteCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
             var actual = await _linkCollector.CollectAllLinksAsync(fakeUrl);
 
             //assert
             Assert.Collection(actual,
-                              link => Assert.True(link.InSitemap),
-                              link => Assert.True(link.InSitemap),
-                              link => Assert.False(link.InSitemap));
+                link => Assert.True(link.InSitemap),
+                link => Assert.True(link.InSitemap),
+                link => Assert.False(link.InSitemap));
         }
 
         [Fact(Timeout = 1000)]
@@ -83,10 +89,12 @@ namespace Crawler.Logic.Tests
 
             IEnumerable<Link> expected = GetExpectedLinks();
 
-            _mockSitemapCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromSitemap);
-            _mockWebsiteCrawler.Setup(url => url.GetUrisAsync(It.IsAny<string>()))
-                                                .ReturnsAsync(fakeUrlsFromWebsite);
+            _mockSitemapCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromSitemap);
+            _mockWebsiteCrawler
+                .Setup(url => url.GetUrisAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeUrlsFromWebsite);
 
             //act
             var actual = await _linkCollector.CollectAllLinksAsync(fakeUrl);
@@ -94,9 +102,9 @@ namespace Crawler.Logic.Tests
             //assert
 
             Assert.Collection(actual,
-                              link => Assert.True(link.InWebsite),
-                              link => Assert.False(link.InWebsite),
-                              link => Assert.True(link.InWebsite));
+                link => Assert.True(link.InWebsite),
+                link => Assert.False(link.InWebsite),
+                link => Assert.True(link.InWebsite));
         }
 
         #region FakeData

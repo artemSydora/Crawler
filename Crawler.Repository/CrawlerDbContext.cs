@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Crawler.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Crawler.Entities;
 
 namespace Crawler.Repository
 {

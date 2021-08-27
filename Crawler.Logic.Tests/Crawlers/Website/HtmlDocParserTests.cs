@@ -1,18 +1,19 @@
-﻿using Moq;
+﻿using Crawler.Logic.Crawlers.Website;
+using Moq;
 using System;
 using Xunit;
 
 namespace Crawler.Logic.Tests
 {
-    public class HtmlParserTests
+    public class HtmlDocParserTests
     {
         private readonly Mock<Verifier> _mockUrlVerifier;
-        private readonly HtmlParser _htmlPageParser;
+        private readonly HtmlDocParser _htmlPageParser;
 
-        public HtmlParserTests()
+        public HtmlDocParserTests()
         {
             _mockUrlVerifier = new Mock<Verifier>();
-            _htmlPageParser = new HtmlParser(_mockUrlVerifier.Object);
+            _htmlPageParser = new HtmlDocParser(_mockUrlVerifier.Object);
         }
 
         [Fact(Timeout = 1000)]
@@ -25,16 +26,17 @@ namespace Crawler.Logic.Tests
                              <a href = ""url""></a>
                              <a href = ""url""></a>";
 
-            _mockUrlVerifier.SetupSequence(un => un.VerifyUrl(It.IsAny<Uri>(), It.IsAny<string>()))
-                                                     .Returns(true)
-                                                     .Returns(true)
-                                                     .Returns(true);
+            _mockUrlVerifier
+                .SetupSequence(un => un.VerifyUri(It.IsAny<Uri>(), It.IsAny<string>()))
+                .Returns(true)
+                .Returns(true)
+                .Returns(true);
 
             //act
             var actual = _htmlPageParser.ParseDocument(fakeUrl, fakePage);
 
             //assert
-            _mockUrlVerifier.Verify(un => un.VerifyUrl(It.IsAny<Uri>(), It.IsAny<string>()), Times.Exactly(3));
+            _mockUrlVerifier.Verify(un => un.VerifyUri(It.IsAny<Uri>(), It.IsAny<string>()), Times.Exactly(3));
         }
 
         [Fact(Timeout = 1000)]
@@ -47,14 +49,15 @@ namespace Crawler.Logic.Tests
                              <a href = """"></a>
                              <a href = ""url""></a>";
 
-            _mockUrlVerifier.Setup(un => un.VerifyUrl(It.IsAny<Uri>(), It.IsAny<string>()))
-                                             .Returns(true);
+            _mockUrlVerifier
+                .Setup(un => un.VerifyUri(It.IsAny<Uri>(), It.IsAny<string>()))
+                .Returns(true);
 
             //act
             var actual = _htmlPageParser.ParseDocument(fakeUrl, fakePage);
 
             //assert
-            _mockUrlVerifier.Verify(un => un.VerifyUrl(It.IsAny<Uri>(), It.IsAny<string>()), Times.Once);
+            _mockUrlVerifier.Verify(un => un.VerifyUri(It.IsAny<Uri>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact(Timeout = 1000)]

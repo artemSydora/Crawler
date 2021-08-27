@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ConsoleTables;
+using Crawler.Logic.Models;
+using System.Collections.Generic;
 using System.Linq;
-using ConsoleTables;
-using Crawler.Logic;
 
 namespace Crawler.ConsoleApp
 {

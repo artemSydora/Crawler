@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crawler.Logic.Crawlers.Sitemap;
+using System;
 using Xunit;
 
 namespace Crawler.Logic.Tests
@@ -29,8 +30,8 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemap1.xml"), url),
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/sitemap1.xml"), url),
+                url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -50,7 +51,7 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/sitemap2.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -71,7 +72,7 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -92,7 +93,7 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/sitemap3.xml"), url));
         }
 
         [Fact(Timeout = 1000)]

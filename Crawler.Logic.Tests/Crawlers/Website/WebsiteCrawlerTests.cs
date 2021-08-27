@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
+using Crawler.Logic.Crawlers.Website;
 
 namespace Crawler.Logic.Tests
 {
     public class WebsiteCrawlerTests
     {
         private readonly Mock<ContentLoader> _mockContentLoader;
-        private readonly Mock<HtmlParser> _mockHtmlPageParser;
+        private readonly Mock<HtmlDocParser> _mockHtmlPageParser;
         private readonly WebsiteCrawler _websiteCrawler;
 
         public WebsiteCrawlerTests()
         {
             _mockContentLoader = new Mock<ContentLoader>(null);
-            _mockHtmlPageParser = new Mock<HtmlParser>(null);
+            _mockHtmlPageParser = new Mock<HtmlDocParser>(null);
             _websiteCrawler = new WebsiteCrawler(_mockContentLoader.Object, _mockHtmlPageParser.Object);
         }
 
@@ -28,23 +29,25 @@ namespace Crawler.Logic.Tests
             IEnumerable<Uri> fakeUris1 = GetFakeUrls1();
             IEnumerable<Uri> fakeUris2 = GetFakeUrls2();
 
-            _mockContentLoader.Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
-                                             .ReturnsAsync(String.Empty);
-            _mockHtmlPageParser.SetupSequence(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
-                                                        .Returns(fakeUris1)
-                                                        .Returns(fakeUris2)
-                                                        .Returns(fakeUris1)
-                                                        .Returns(fakeUris2);
+            _mockContentLoader
+                .Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
+                .ReturnsAsync(String.Empty);
+            _mockHtmlPageParser
+                .SetupSequence(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(fakeUris1)
+                .Returns(fakeUris2)
+                .Returns(fakeUris1)
+                .Returns(fakeUris2);
 
             //act
             var actual = await _websiteCrawler.GetUrisAsync(fakeUrl);
 
             //assert
             Assert.Collection(actual,
-                              uri => Assert.Equal(new Uri("http://www.example.com/"), uri),
-                              uri => Assert.Equal(new Uri("http://www.example.com/Home"), uri),
-                              uri => Assert.Equal(new Uri("http://www.example.com/About"), uri),
-                              uri => Assert.Equal(new Uri("http://www.example.com/Help"), uri));
+                uri => Assert.Equal(new Uri("http://www.example.com/"), uri),
+                uri => Assert.Equal(new Uri("http://www.example.com/Home"), uri),
+                uri => Assert.Equal(new Uri("http://www.example.com/About"), uri),
+                uri => Assert.Equal(new Uri("http://www.example.com/Help"), uri));
         }
 
         [Fact(Timeout = 1000)]
@@ -59,13 +62,15 @@ namespace Crawler.Logic.Tests
 
             var uniqueUrlCount = 4;
 
-            _mockContentLoader.Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
-                              .ReturnsAsync(String.Empty);
-            _mockHtmlPageParser.SetupSequence(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
-                               .Returns(fakeUris1)
-                               .Returns(fakeUris2)
-                               .Returns(fakeUris1)
-                               .Returns(fakeUris2);
+            _mockContentLoader
+                .Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
+                .ReturnsAsync(String.Empty);
+            _mockHtmlPageParser
+                .SetupSequence(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(fakeUris1)
+                .Returns(fakeUris2)
+                .Returns(fakeUris1)
+                .Returns(fakeUris2);
             //act
             var actual = await _websiteCrawler.GetUrisAsync(fakeUrl);
 
@@ -79,10 +84,12 @@ namespace Crawler.Logic.Tests
             //arrange
             var fakeUrl = "http://www.example.com/";
 
-            _mockContentLoader.Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
-                                             .ReturnsAsync(String.Empty);
-            _mockHtmlPageParser.Setup(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
-                                                .Returns(Array.Empty<Uri>());
+            _mockContentLoader
+                .Setup(cl => cl.GetContentAsync(It.IsAny<string>()))
+                .ReturnsAsync(String.Empty);
+            _mockHtmlPageParser
+                .Setup(hpp => hpp.ParseDocument(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Array.Empty<Uri>());
 
             //act
             var actual = await _websiteCrawler.GetUrisAsync(fakeUrl);

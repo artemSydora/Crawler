@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crawler.Logic
+namespace Crawler.Logic.Models
 {
     public class Ping
     {

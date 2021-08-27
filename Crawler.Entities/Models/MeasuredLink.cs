@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crawler.Entities
+﻿namespace Crawler.Entities.Models
 {
     public class MeasuredLink
     {

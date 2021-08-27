@@ -1,22 +1,23 @@
-﻿using System;
+﻿using Crawler.Entities.Models;
+using Crawler.Logic.Models;
+using Crawler.Repository;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Moq;
-using Crawler.Entities;
-using Crawler.Repository;
 
 namespace Crawler.Logic.Tests
 {
     public class LinkServiceTests
     {
-        private readonly Mock<RepositoryDataAccess> _mockRepositoryDataAccess;
+        private readonly Mock<DataAccess> _mockDataAccess;
         private readonly LinkService _linkService;
 
         public LinkServiceTests()
         {
-            _mockRepositoryDataAccess = new Mock<RepositoryDataAccess>(null);
-            _linkService = new LinkService(_mockRepositoryDataAccess.Object);
+            _mockDataAccess = new Mock<DataAccess>(null);
+            _linkService = new LinkService(_mockDataAccess.Object);
         }
 
         [Fact]
@@ -27,14 +28,14 @@ namespace Crawler.Logic.Tests
             var fakeLinks = new[] { new Link() };
             var fakePings = new[] { new Ping() };
 
-            _mockRepositoryDataAccess
+            _mockDataAccess
                .Setup(rda => rda.SaveTestResultAsync(It.IsAny<string>(), It.IsAny<IEnumerable<MeasuredLink>>()));
 
             //act
             await _linkService.AddTestResultsAsync(fakeHomePageUrl, fakeLinks, fakePings);
 
             //assert
-            _mockRepositoryDataAccess
+            _mockDataAccess
                 .Verify(rda => rda.SaveTestResultAsync(It.IsAny<string>(), It.IsAny<IEnumerable<MeasuredLink>>()), Times.Once);
         }
 
@@ -44,7 +45,7 @@ namespace Crawler.Logic.Tests
             //arrange
             var fakeMeaseredLinkCollection = GetFakeMeasuredLinks();
 
-            _mockRepositoryDataAccess
+            _mockDataAccess
                 .Setup(rda => rda.GetTestsByHomePageUrl(It.IsAny<string>()))
                 .Returns(new Test
                 {
@@ -67,7 +68,7 @@ namespace Crawler.Logic.Tests
             //arrange
             var fakeMeaseredLinkCollection = GetFakeMeasuredLinks();
 
-            _mockRepositoryDataAccess
+            _mockDataAccess
                 .Setup(rda => rda.GetTestsByHomePageUrl(It.IsAny<string>()))
                 .Returns(new Test
                 {
@@ -88,7 +89,7 @@ namespace Crawler.Logic.Tests
             //arrange
             var fakeMeaseredLinkCollection = GetFakeMeasuredLinks();
 
-            _mockRepositoryDataAccess
+            _mockDataAccess
                 .Setup(rda => rda.GetTestsByHomePageUrl(It.IsAny<string>()))
                 .Returns(new Test
                 {

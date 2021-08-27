@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Crawler.Logic.Crawlers.Sitemap;
+using Crawler.Logic.Crawlers.Website;
+using Crawler.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +41,8 @@ namespace Crawler.Logic
                 })
                 .ToList();
 
-            allLinks.AddRange(urlsFromSitemap
+            allLinks
+                .AddRange(urlsFromSitemap
                 .Except(urlsFromWebsite, comparer)
                 .Select(uri => new Link
                 {
@@ -47,7 +51,8 @@ namespace Crawler.Logic
                     Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
                 }));
 
-            allLinks.AddRange(urlsFromWebsite
+            allLinks
+                .AddRange(urlsFromWebsite
                 .Except(urlsFromSitemap, comparer)
                 .Select(uri => new Link
                 {

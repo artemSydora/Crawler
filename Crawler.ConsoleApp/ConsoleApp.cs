@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Crawler.Logic;
+using Crawler.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Crawler.Logic;
 
 namespace Crawler.ConsoleApp
 {
@@ -15,7 +16,7 @@ namespace Crawler.ConsoleApp
         private readonly LinkService _linkService;
         private readonly ConsoleWrapper _consoleWrapper;
 
-        public ConsoleApp(Display display, LinkCollector linkCollector,PingCollector pingCollector, LinkService linkService, ConsoleWrapper consoleWrapper)
+        public ConsoleApp(Display display, LinkCollector linkCollector, PingCollector pingCollector, LinkService linkService, ConsoleWrapper consoleWrapper)
         {
             _display = display;
             _linkCollector = linkCollector;
@@ -39,7 +40,7 @@ namespace Crawler.ConsoleApp
                     IEnumerable<Ping> pings = await _pingCollector.MeasureLinksAsync(links);
 
                     await _linkService.AddTestResultsAsync(homePageUrl, links, pings);
-                    
+
                     IEnumerable<Link> uniqueUrlsFromSitemap = _linkService.GetUniqueSitemapLinksByUrl(homePageUrl);
                     IEnumerable<Link> uniqueUrlsFromWebsite = _linkService.GetUniqueWebsiteLinksByUrl(homePageUrl);
 
@@ -60,7 +61,7 @@ namespace Crawler.ConsoleApp
                 {
                     _consoleWrapper.WtiteLine(ex.Message);
                 }
-                catch(HttpRequestException ex)
+                catch (HttpRequestException ex)
                 {
                     _consoleWrapper.WtiteLine(ex.Message);
                 }

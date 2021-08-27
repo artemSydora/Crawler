@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Crawler.Logic.Crawlers.Sitemap;
+using System;
 using Xunit;
-using static Crawler.Logic.XmlParser;
+using static Crawler.Logic.Crawlers.Sitemap.XmlDocParser;
 
 namespace Crawler.Logic.Tests
 {
-    public class XmlParserTests
+    public class XmlDocParserTests
     {
-        private readonly XmlParser _xmlPageParser;
+        private readonly XmlDocParser _xmlPageParser;
 
-        public XmlParserTests()
+        public XmlDocParserTests()
         {
-            _xmlPageParser = new XmlParser();
+            _xmlPageParser = new XmlDocParser();
         }
 
         [Fact(Timeout = 1000)]
@@ -37,9 +38,9 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/"), url),
-                              url => Assert.Equal(new Uri("http://www.example.com/Home/"), url),
-                              url => Assert.Equal(new Uri("http://www.example.com/About"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/"), url),
+                url => Assert.Equal(new Uri("http://www.example.com/Home/"), url),
+                url => Assert.Equal(new Uri("http://www.example.com/About"), url));
         }
 
         [Fact(Timeout = 1000)]
@@ -66,9 +67,9 @@ namespace Crawler.Logic.Tests
 
             //assert
             Assert.Collection(actual,
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap1.xml"), url),
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap2.xml"), url),
-                              url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap3.xml"), url));
+                url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap1.xml"), url),
+                url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap2.xml"), url),
+                url => Assert.Equal(new Uri("http://www.example.com/sitemaps/sitemap3.xml"), url));
         }
 
         [Fact(Timeout = 1000)]

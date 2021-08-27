@@ -1,28 +1,29 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using Crawler.Logic.Models;
 
 namespace Crawler.Logic
 {
     public class PingMeter
     {
         private readonly Stopwatch _timer;
-        private readonly ContentLoader _sourseLoader;
+        private readonly ContentLoader _contentLoader;
 
-        public PingMeter(Stopwatch timer, ContentLoader sourseLoader)
+        public PingMeter(Stopwatch timer, ContentLoader contentLoader)
         {
             _timer = timer;
-            _sourseLoader = sourseLoader;
+            _contentLoader = contentLoader;
         }
 
         public virtual async Task<Ping> Measure(Link link)
         {
             _timer.Start();
 
-            using var responce = await _sourseLoader.GetResponseAsync(link.Url);
+            using var response = await _contentLoader.GetResponseAsync(link.Url);
 
             _timer.Stop();
-
-            var timing = new Ping
+            
+            var ping = new Ping
             {
                 Url = link.Url,
                 ResponseTimeMs = (int)_timer.ElapsedMilliseconds
@@ -30,7 +31,7 @@ namespace Crawler.Logic
 
             _timer.Reset();
 
-            return timing;
+            return ping;
         }
     }
 }

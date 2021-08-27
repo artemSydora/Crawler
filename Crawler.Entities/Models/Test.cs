@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Crawler.Entities
+namespace Crawler.Entities.Models
 {
     public class Test
     {
@@ -16,6 +16,6 @@ namespace Crawler.Entities
 
         public DateTime DateTime { get; set; }
 
-        public List<MeasuredLink> MeasuredLinks { get; set; }
+        public ICollection<MeasuredLink> MeasuredLinks { get; set; }
     }
 }

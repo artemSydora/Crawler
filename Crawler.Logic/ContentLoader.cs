@@ -12,7 +12,7 @@ namespace Crawler.Logic
             _client = client;
         }
 
-        internal virtual async Task<string> GetContentAsync(string url)
+        public virtual async Task<string> GetContentAsync(string url)
         {
             string content = string.Empty;
 
@@ -27,7 +27,7 @@ namespace Crawler.Logic
             return content;
         }
 
-        internal async Task<HttpResponseMessage> GetResponseAsync(string url)
+        public async Task<HttpResponseMessage> GetResponseAsync(string url)
         {
             var response = await _client.GetAsync(url);
 
