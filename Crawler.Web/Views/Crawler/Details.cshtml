@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TestDetail>;
+
+<div class="text-center">
+    <h1 class="display-4">Tests</h1>
+    <table class="table table-borderless table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col" class="w-auto">Url</th>
+                <th scope="col">Timing</th>
+            </tr>
+        </thead>
+        @{
+            foreach (var detail in Model)
+            {
+
+                <tbody class="text-left">
+                    <tr>
+                        <td>@detail.Url</td>
+                        <td>@detail.ResponseTimeMs</td>
+                    </tr>
+
+                </tbody>
+
+            }
+        }
+    </table>
+</div>

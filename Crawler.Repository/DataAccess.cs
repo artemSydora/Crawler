@@ -23,16 +23,15 @@ namespace Crawler.Repository
             {
                 HomePageUrl = homePageUrl,
                 DateTime = DateTime.Now,
-                MeasuredLinks = measuredLinks.ToList()
+                MeasuredLinks = measuredLinks.ToList()  
             });
 
             await _repository.SaveChangesAsync();
         }
 
-        public virtual IEnumerable<int> GetAllTestIds()
+        public virtual IEnumerable<Test> GetAllTests()
         {
             var allIds = _repository.GetAll()
-                .Select(t => t.Id)
                 .OrderBy(i => i);
 
             return allIds;
@@ -44,6 +43,15 @@ namespace Crawler.Repository
                 .Include(t => t.MeasuredLinks)
                 .OrderBy(t => t.Id)
                 .LastOrDefault(t => t.HomePageUrl == homePageUrl);
+
+            return test;
+        }
+
+        public virtual Test GetTestById(int id)
+        {
+            var test = _repository
+                .Include(t => t.MeasuredLinks)
+                .FirstOrDefault(t => t.Id == id);
 
             return test;
         }

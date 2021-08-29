@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Test>;
+
+<div class="text-center">
+    <h1 class="display-4">Tests</h1>
+    <table class="table table-borderless table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col"class="w-75">Website</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        @{
+            foreach (var test in Model)
+            {
+             
+                <tbody class="text-left">
+                            <tr>
+                                <th scope="row"><a asp-controller="crawler" asp-action="Details" asp-route-id="@test.Id">@test.Id</a></th>
+                                <td>@test.HomePageUrl</td>
+                                <td>@test.DateTime</td>   
+                            </tr>
+           
+                </tbody>           
+            }
+        }
+    </table>
+</div>

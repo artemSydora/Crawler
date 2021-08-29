@@ -61,7 +61,7 @@ namespace Crawler.Logic
                     Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
                 }));
 
-            return allLinks;
+            return allLinks.ToHashSet();
         }
     }
 }

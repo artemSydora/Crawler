@@ -11,13 +11,12 @@ namespace Crawler.Logic.Models
         public override bool Equals(object obj)
         {
             return obj is Ping ping &&
-                   Url == ping.Url &&
-                   ResponseTimeMs == ping.ResponseTimeMs;
+                   Url == ping.Url;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Url, ResponseTimeMs);
+            return Url.GetHashCode();
         }
     }
 }

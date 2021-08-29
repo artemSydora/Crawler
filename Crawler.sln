@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Entities", "Crawler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crawler.Repository", "Crawler.Repository\Crawler.Repository.csproj", "{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Web", "Crawler.Web\Crawler.Web.csproj", "{5D438CFB-5AD2-4ADD-879A-73A5DBAF97DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8BA4F77-DBB6-4516-8552-DE4E712FA0A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D438CFB-5AD2-4ADD-879A-73A5DBAF97DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D438CFB-5AD2-4ADD-879A-73A5DBAF97DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D438CFB-5AD2-4ADD-879A-73A5DBAF97DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D438CFB-5AD2-4ADD-879A-73A5DBAF97DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

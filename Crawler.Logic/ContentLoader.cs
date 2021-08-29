@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Crawler.Logic
@@ -26,6 +27,8 @@ namespace Crawler.Logic
 
             return content;
         }
+
+        
 
         public async Task<HttpResponseMessage> GetResponseAsync(string url)
         {
