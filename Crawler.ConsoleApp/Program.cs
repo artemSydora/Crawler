@@ -6,9 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Diagnostics;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -47,9 +44,6 @@ namespace Crawler.ConsoleApp
                     services.AddSingleton<ContentLoader>();
                     services.AddScoped<PingMeter>(); ;
                     services.AddScoped<PingCollector>();
-                    services.AddScoped<Stopwatch>();
-                    services.AddScoped<XmlDocument>();
-                    services.AddSingleton<HttpClient>();
 
                     services.AddScoped<ConsoleApp>();
                     services.AddScoped<Display>();

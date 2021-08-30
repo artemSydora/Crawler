@@ -12,7 +12,7 @@ namespace Crawler.Logic.Tests
 
         public PingCollectorTests()
         {
-            _mockTimeMeter = new Mock<PingMeter>(null, null);
+            _mockTimeMeter = new Mock<PingMeter>(null);
             _pingCollector = new PingCollector(_mockTimeMeter.Object);
         }
 

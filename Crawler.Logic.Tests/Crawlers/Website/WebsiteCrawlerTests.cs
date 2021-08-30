@@ -15,7 +15,7 @@ namespace Crawler.Logic.Tests
 
         public WebsiteCrawlerTests()
         {
-            _mockContentLoader = new Mock<ContentLoader>(null);
+            _mockContentLoader = new Mock<ContentLoader>();
             _mockHtmlPageParser = new Mock<HtmlDocParser>(null);
             _websiteCrawler = new WebsiteCrawler(_mockContentLoader.Object, _mockHtmlPageParser.Object);
         }

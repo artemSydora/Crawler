@@ -7,16 +7,16 @@ namespace Crawler.Logic
     {
         private readonly HttpClient _client;
 
-        public ContentLoader(HttpClient client)
+        public ContentLoader()
         {
-            _client = client;
+            _client = new HttpClient();
         }
 
         public virtual async Task<string> GetContentAsync(string url)
         {
             string content = string.Empty;
 
-            using (var response = await GetResponseAsync(url))
+            using (var response = await _client.GetAsync(url))
             {
                 if (response != null && response.IsSuccessStatusCode)
                 {
@@ -25,13 +25,6 @@ namespace Crawler.Logic
             }
 
             return content;
-        }
-
-        public async Task<HttpResponseMessage> GetResponseAsync(string url)
-        {
-            var response = await _client.GetAsync(url);
-
-            return response;
         }
     }
 }

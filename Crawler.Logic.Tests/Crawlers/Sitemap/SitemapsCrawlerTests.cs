@@ -16,7 +16,7 @@ namespace Crawler.Logic.Tests
 
         public SitemapsCrawlerTests()
         {
-            _mockContentLoader = new Mock<ContentLoader>(null);
+            _mockContentLoader = new Mock<ContentLoader>();
             _mockXmlPageParser = new Mock<XmlDocParser>();
             _mockRobotsParser = new Mock<RobotsParser>();
             _sitemapCrawler = new SitemapsCrawler(_mockContentLoader.Object, _mockXmlPageParser.Object, _mockRobotsParser.Object);
