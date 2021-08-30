@@ -1,6 +1,7 @@
 ﻿using Crawler.Entities.Models;
 using Crawler.Logic.Models;
 using Crawler.Repository;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,15 +25,6 @@ namespace Crawler.Logic
             return tests;
         }
 
-        public IEnumerable<MeasuredLink> GetLinksByTestId(int id)
-        {
-            var measuredLinks = _dataAccess
-                .GetTestById(id)
-                .MeasuredLinks;
-
-            return measuredLinks;
-        }
-
         public async Task AddTestResultsAsync(string homePageUrl, IEnumerable<Link> links, IEnumerable<Ping> pings)
         {
             var measuredLinks = links
@@ -47,10 +39,10 @@ namespace Crawler.Logic
             await _dataAccess.SaveTestResultAsync(homePageUrl, measuredLinks);
         }
 
-        public IEnumerable<Ping> GetPingsByUrlOrderByPing(string homePageUrl)
+        public IEnumerable<Ping> GetPingsByTestIdOrderByPing(int id)
         {
             var pings = _dataAccess
-                .GetTestsByHomePageUrl(homePageUrl)
+                .GetTestById(id)
                 .MeasuredLinks
                 .Select(ml => new Ping
                 {
@@ -61,10 +53,10 @@ namespace Crawler.Logic
             return pings.OrderBy(p => p.ResponseTimeMs);
         }
 
-        public IEnumerable<Link> GetUniqueSitemapLinksByUrl(string homePageUrl)
+        public IEnumerable<Link> GetUniqueSitemapLinksByTestId(int id)
         {
             var links = _dataAccess
-                .GetTestsByHomePageUrl(homePageUrl)
+                .GetTestById(id)
                 .MeasuredLinks
                 .Where(ml => ml.InSitemap && !ml.InWebsite)
                 .Select(ml => LinkFromMeasuredLink(ml));
@@ -72,15 +64,24 @@ namespace Crawler.Logic
             return links;
         }
 
-        public IEnumerable<Link> GetUniqueWebsiteLinksByUrl(string homePageUrl)
+        public IEnumerable<Link> GetUniqueWebsiteLinksByTestId(int id)
         {
             var links = _dataAccess
-                .GetTestsByHomePageUrl(homePageUrl)
+                .GetTestById(id)
                 .MeasuredLinks
                 .Where(l => !l.InSitemap && l.InWebsite)
                 .Select(ml => LinkFromMeasuredLink(ml));
 
             return links;
+        }
+
+        public IEnumerable<MeasuredLink> GetMeasuredLinksByTestId(int id)
+        {
+            var measuredLinks = _dataAccess
+                .GetTestById(id)
+                .MeasuredLinks;
+
+            return measuredLinks;
         }
 
         private Link LinkFromMeasuredLink(MeasuredLink measuredLink)

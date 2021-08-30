@@ -30,6 +30,20 @@ namespace Crawler.Logic.Tests
         }
 
         [Fact]
+        public void VerifyUrl_ShouldVerifyDifferenceSchemes()
+        {
+            //arrange
+            var baseUri = new Uri("https://www.contoso.com/Home/");
+            var path = "mailto:someone@www.contoso.com";
+
+            //act
+            var actual = _verifier.VerifyUri(baseUri, path);
+
+            //assert
+            Assert.False(actual);
+        }
+
+        [Fact]
         public void VerifyUrl_ShouldVerifyEqualsDomains()
         {
             //arrange

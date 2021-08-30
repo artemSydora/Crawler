@@ -1,27 +1,132 @@
-﻿@model IEnumerable<TestDetail>;
+﻿@model TestDetailViewModel;
 
 <div class="text-center">
-    <h1 class="display-4">Tests</h1>
-    <table class="table table-borderless table-hover table-sm">
-        <thead>
-            <tr>
-                <th scope="col" class="w-auto">Url</th>
-                <th scope="col">Timing</th>
-            </tr>
-        </thead>
-        @{
-            foreach (var detail in Model)
-            {
-
-                <tbody class="text-left">
-                    <tr>
-                        <td>@detail.Url</td>
-                        <td>@detail.ResponseTimeMs</td>
-                    </tr>
-
-                </tbody>
-
+    <h3 class="h3">Performance</h3>
+    @if (Model.PingIndex.Links.Count() > 0)
+    {
+        <table class="table table-bordered box-shadow table-hover table-sm text-left">
+            <thead>
+                <tr>
+                    <th scope="col">Url</th>
+                    <th scope="col">Timing</th>
+                </tr>
+            </thead>
+            @{
+                foreach (var ping in Model.PingIndex.Links)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@ping.Url</td>
+                            <td>@ping.ResponseTimeMs</td>
+                        </tr>
+                    </tbody>
+                }
             }
+        </table>
+
+        @if (Model.PingIndex.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Details"
+               asp-route-page="@(Model.PingIndex.PageViewModel.PageNumber - 1)"
+               class="btn btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Назад
+            </a>
         }
-    </table>
+        @if (Model.PingIndex.PageViewModel.HasNextPage)
+        {
+            <a asp-action="Details"
+               asp-route-page="@(Model.PingIndex.PageViewModel.PageNumber + 1)"
+               class="btn btn-outline-dark">
+                Вперед
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        }
+     }
+
+    @if (Model.SitemapIndex.Links.Count() > 0)
+    {
+        <h3 class="h3 mt-5">Urls not found at website</h3>
+        <table class="table table-bordered box-shadow table-hover table-sm text-left">
+            <thead>
+                <tr>
+                    <th scope="col">Url</th>
+                </tr>
+            </thead>
+            @{
+                foreach (var urlInSitemap in Model.SitemapIndex.Links)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@urlInSitemap</td>
+                        </tr>
+
+                    </tbody>
+                }
+            }
+        </table>
+
+       @if (Model.PingIndex.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Details"
+                asp-route-page="@(Model.PingIndex.PageViewModel.PageNumber - 1)"
+                class="btn btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Назад
+            </a>
+        }
+       @if (Model.PingIndex.PageViewModel.HasNextPage)
+    {
+        <a asp-action="Details"
+            asp-route-page="@(Model.PingIndex.PageViewModel.PageNumber + 1)"
+            class="btn btn-outline-dark">
+            Вперед
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }
+    }
+
+    @if (Model.WebsiteIndex.Links.Count() > 0)
+    {
+        <h3 class="h3 mt-5">Urls not found at sitemap</h3>
+        <table class="table table-bordered box-shadow table-hover table-sm text-left">
+            <thead>
+                <tr>
+                    <th scope="col">Url</th>
+                </tr>
+            </thead>
+            @{
+                foreach (var urlInWebsite in Model.WebsiteIndex.Links)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@urlInWebsite</td>
+                        </tr>
+
+                    </tbody>
+                }
+            }
+        </table>
+
+        @if (Model.PingIndex.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Details"
+                asp-route-page="@(Model.WebsiteIndex.PageViewModel.PageNumber - 1)"
+                class="btn btn-outline-dark">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                Назад
+            </a>
+        }
+
+        @if (Model.PingIndex.PageViewModel.HasNextPage)
+        {
+            <a asp-action="Details"
+                asp-route-page="@(Model.WebsiteIndex.PageViewModel.PageNumber + 1)"
+                class="btn btn-outline-dark">
+                Вперед
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        }
+    }
+
 </div>

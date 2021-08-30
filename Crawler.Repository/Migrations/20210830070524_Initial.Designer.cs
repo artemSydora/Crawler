@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Crawler.Repository.Migrations
 {
     [DbContext(typeof(CrawlerDbContext))]
-    [Migration("20210826155726_RenameTableColumn")]
-    partial class RenameTableColumn
+    [Migration("20210830070524_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace Crawler.Repository.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Crawler.Entities.MeasuredLink", b =>
+            modelBuilder.Entity("Crawler.Entities.Models.MeasuredLink", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace Crawler.Repository.Migrations
                     b.ToTable("LinkPerformanceResults");
                 });
 
-            modelBuilder.Entity("Crawler.Entities.Test", b =>
+            modelBuilder.Entity("Crawler.Entities.Models.Test", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,14 +72,14 @@ namespace Crawler.Repository.Migrations
                     b.ToTable("Tests");
                 });
 
-            modelBuilder.Entity("Crawler.Entities.MeasuredLink", b =>
+            modelBuilder.Entity("Crawler.Entities.Models.MeasuredLink", b =>
                 {
-                    b.HasOne("Crawler.Entities.Test", null)
+                    b.HasOne("Crawler.Entities.Models.Test", null)
                         .WithMany("MeasuredLinks")
                         .HasForeignKey("TestId");
                 });
 
-            modelBuilder.Entity("Crawler.Entities.Test", b =>
+            modelBuilder.Entity("Crawler.Entities.Models.Test", b =>
                 {
                     b.Navigation("MeasuredLinks");
                 });

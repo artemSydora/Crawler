@@ -1,6 +1,6 @@
 ﻿namespace Crawler.Web.Models
 {
-    public class TestDetail
+    public class Detail
     {
         public string Url { get; set; }
 

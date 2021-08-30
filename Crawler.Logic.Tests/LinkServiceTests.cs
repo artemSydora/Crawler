@@ -53,7 +53,7 @@ namespace Crawler.Logic.Tests
                 });
 
             //act
-            IEnumerable<Ping> actual = _linkService.GetPingsByUrlOrderByPing(String.Empty);
+            IEnumerable<Ping> actual = _linkService.GetPingsByTestIdOrderByPing(String.Empty);
 
             //assert
             Assert.Collection(actual,
@@ -76,7 +76,7 @@ namespace Crawler.Logic.Tests
                 });
 
             //act
-            IEnumerable<Link> actual = _linkService.GetUniqueWebsiteLinksByUrl(String.Empty);
+            IEnumerable<Link> actual = _linkService.GetUniqueWebsiteLinksBytestId(String.Empty);
 
             //assert
             Assert.Collection(actual,
@@ -97,7 +97,7 @@ namespace Crawler.Logic.Tests
                 });
 
             //act
-            IEnumerable<Link> actual = _linkService.GetUniqueSitemapLinksByUrl(String.Empty);
+            IEnumerable<Link> actual = _linkService.GetUniqueSitemapLinksByTestId(String.Empty);
 
             //assert
             Assert.Collection(actual,
