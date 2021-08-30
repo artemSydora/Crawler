@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Crawler.Repository.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,7 @@ namespace Crawler.Repository.Migrations
                     Url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
                     InSitemap = table.Column<bool>(type: "bit", nullable: false),
                     InWebsite = table.Column<bool>(type: "bit", nullable: false),
-                    ResponseTime = table.Column<int>(type: "int", nullable: false),
+                    ResponseTimeMs = table.Column<int>(type: "int", nullable: false),
                     TestId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

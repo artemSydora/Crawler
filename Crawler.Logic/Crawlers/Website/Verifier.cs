@@ -20,29 +20,32 @@ namespace Crawler.Logic.Crawlers.Website
                 verifyResult = VerifyRelativeUri(baseUri, pathUri);
             }
 
-            if (pathUri.IsAbsoluteUri && pathUri.Host.Equals(baseUri.Host))
+            if (pathUri.IsAbsoluteUri)
             {
-                verifyResult = VerifyAbsoluteUri(pathUri);
+                verifyResult = VerifyAbsoluteUri(baseUri, pathUri);
             }
 
             return verifyResult;
         }
 
-        private bool VerifyAbsoluteUri(Uri absoluteUri)
+        private bool VerifyAbsoluteUri(Uri baseUri, Uri absoluteUri)
         {
-            var verifyResult = VerifyUrlPointsToHtml(absoluteUri);
+            if (!absoluteUri.Host.Equals(baseUri.Host) || !absoluteUri.Scheme.Equals(baseUri.Scheme))
+            {
+                return false;
+            }
 
             if (!String.IsNullOrEmpty(absoluteUri.Fragment))
             {
-                verifyResult = false;
+                return false;
             }
 
             if (!String.IsNullOrEmpty(absoluteUri.Query))
             {
-                verifyResult = false;
+                return false;
             }
 
-            return verifyResult;
+            return VerifyUrlPointsToHtml(absoluteUri);
         }
 
         private bool VerifyRelativeUri(Uri baseUri, Uri relativeUri)
@@ -54,19 +57,19 @@ namespace Crawler.Logic.Crawlers.Website
                 return false;
             }
 
-            var verifyResult = VerifyAbsoluteUri(absoluteUri);
+            var verifyResult = VerifyAbsoluteUri(baseUri, absoluteUri);
 
             return verifyResult;
         }
 
         private bool VerifyUrlPointsToHtml(Uri absoluteUri)
         {
-            var urlEndContainsDot = absoluteUri.AbsolutePath.Substring(absoluteUri.AbsolutePath.LastIndexOf("/")).Contains(".");
+            var path = absoluteUri.AbsolutePath;
+
+            var urlEndContainsDot = path.Substring(path.LastIndexOf("/")).Contains(".");
 
             if (urlEndContainsDot)
             {
-                var path = absoluteUri.AbsolutePath;
-
                 var urlEndsWithHtml = String.Equals(path.Substring(path.LastIndexOf(".")), ".html", StringComparison.OrdinalIgnoreCase);
                 var urlEndsWithHtm = String.Equals(path.Substring(path.LastIndexOf(".")), ".htm", StringComparison.OrdinalIgnoreCase);
 

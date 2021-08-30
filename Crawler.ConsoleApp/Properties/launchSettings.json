@@ -3,7 +3,7 @@
     "Crawler.ConsoleApp": {
       "commandName": "Project",
       "environmentVariables": {
-        "ConnectionString": "Data Source=WONDERWAFFEL\\SQLEXPRESS;Initial Catalog=CrawlerDB; Integrated Security = True"
+        "ConnectionString": "Data Source=DESKTOP-G7JJCOH\\MSSQLSERVER01; Initial Catalog=CrawlerDB; Integrated Security=True"
       }
     }
   }

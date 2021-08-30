@@ -33,7 +33,7 @@ namespace Crawler.ConsoleApp
                     services.AddScoped<DataAccess>();
                     services.AddEfRepository<CrawlerDbContext>(options =>
                     {
-                        options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString"));
+                        options.UseSqlServer("Data Source=DESKTOP-G7JJCOH\\MSSQLSERVER01; Initial Catalog = CrawlerDB; Integrated Security = True");
                     });
 
                     services.AddScoped<LinkService>();
