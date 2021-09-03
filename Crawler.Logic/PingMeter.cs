@@ -9,9 +9,9 @@ namespace Crawler.Logic
         private readonly Stopwatch _timer;
         private readonly ContentLoader _contentLoader;
 
-        public PingMeter(Stopwatch timer, ContentLoader contentLoader)
+        public PingMeter(ContentLoader contentLoader)
         {
-            _timer = timer;
+            _timer = new Stopwatch();
             _contentLoader = contentLoader;
         }
 
@@ -19,7 +19,7 @@ namespace Crawler.Logic
         {
             _timer.Start();
 
-            using var response = await _contentLoader.GetResponseAsync(link.Url);
+            var response = await _contentLoader.GetContentAsync(link.Url);
 
             _timer.Stop();
             

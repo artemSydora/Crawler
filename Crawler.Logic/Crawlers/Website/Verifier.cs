@@ -30,7 +30,7 @@ namespace Crawler.Logic.Crawlers.Website
 
         private bool VerifyAbsoluteUri(Uri baseUri, Uri absoluteUri)
         {
-            if(!absoluteUri.Host.Equals(baseUri.Host) || !absoluteUri.Scheme.Equals(baseUri.Scheme))
+            if(!absoluteUri.Host.Equals(baseUri.Host) || (absoluteUri.Scheme != Uri.UriSchemeHttps && absoluteUri.Scheme != Uri.UriSchemeHttp))
             {
                 return false;
             }

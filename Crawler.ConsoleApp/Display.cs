@@ -14,7 +14,7 @@ namespace Crawler.ConsoleApp
             _consoleWrapper = consoleWrapper;
         }
 
-        public void ShowTable(string tableName, IEnumerable<Link> links, string columnName)
+        public void ShowTable(string tableName, IEnumerable<string> links, string columnName)
         {
             _consoleWrapper.WtiteLine(tableName);
 
@@ -24,7 +24,7 @@ namespace Crawler.ConsoleApp
             table.Options.EnableCount = false;
 
             links.ToList()
-                 .ForEach(link => table.AddRow($"{count++,4}) {link.Url}"));
+                 .ForEach(url => table.AddRow($"{count++,4}) {url}"));
 
             table.Write();
         }

@@ -20,8 +20,10 @@ namespace Crawler.Logic.Crawlers.Website
             var newUrls = new Stack<string>();
             newUrls.Push(url);
 
-            var uris = new HashSet<Uri>();
-            uris.Add(new Uri(url));
+            var uris = new HashSet<Uri>
+            {
+                new Uri(url)
+            };
 
             while (newUrls.Count > 0)
             {

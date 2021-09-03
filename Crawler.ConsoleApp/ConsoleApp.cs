@@ -1,5 +1,5 @@
-﻿using Crawler.Logic;
-using Crawler.Logic.Models;
+﻿using Crawler.Logic.Models;
+using Crawler.Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +11,18 @@ namespace Crawler.ConsoleApp
     public class ConsoleApp
     {
         private readonly Display _display;
-        private readonly LinkCollector _linkCollector;
-        private readonly PingCollector _pingCollector;
-        private readonly LinkService _linkService;
         private readonly ConsoleWrapper _consoleWrapper;
+        private readonly TestsService _testsService;
+        private readonly DetailsService _detailsService;
+        private readonly InputValidationService _inputValidationService;
 
-        public ConsoleApp(Display display, LinkCollector linkCollector, PingCollector pingCollector, LinkService linkService, ConsoleWrapper consoleWrapper)
+        public ConsoleApp(Display display, ConsoleWrapper consoleWrapper, TestsService testsService, DetailsService detailsService, InputValidationService inputValidationService)
         {
             _display = display;
-            _linkCollector = linkCollector;
-            _pingCollector = pingCollector;
-            _linkService = linkService;
             _consoleWrapper = consoleWrapper;
+            _testsService = testsService;
+            _detailsService = detailsService;
+            _inputValidationService = inputValidationService;
         }
 
         public async Task Run()
@@ -34,28 +34,36 @@ namespace Crawler.ConsoleApp
             {
                 try
                 {
-                    var homePageUrl = GetHomePageUrl(input);
+                    var isValidInput = await _inputValidationService.VerifyUlr(input);
 
-                    IEnumerable<Link> links = await _linkCollector.CollectAllLinksAsync(homePageUrl);
-                    IEnumerable<Ping> pings = await _pingCollector.MeasureLinksAsync(links);
+                    if (!isValidInput)
+                    {
+                        _consoleWrapper.WtiteLine("Invalid input url");
+                    }
+                    else
+                    {
+                        await _testsService.SaveTestResults(input);
+                       
+                    }
+                
+                        var latestTestId = _testsService
+                            .GetAllTests()
+                            .Max(t => t.Id);
+                    
+                    IEnumerable<string> urlsFromSitemap = _detailsService.GetUniqueSitemapUrlsByTestId(latestTestId);
+                    IEnumerable<string> urlsFromWebsite = _detailsService.GetUniqueWebsiteUrlsByTestId(latestTestId);
 
-                    await _linkService.AddTestResultsAsync(homePageUrl, links, pings);
+                    _display.ShowTable("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", urlsFromSitemap, "URL");
+                    _display.ShowTable("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", urlsFromWebsite, "URL");
 
-                    IEnumerable<Link> uniqueUrlsFromSitemap = _linkService.GetUniqueSitemapLinksByUrl(homePageUrl);
-                    IEnumerable<Link> uniqueUrlsFromWebsite = _linkService.GetUniqueWebsiteLinksByUrl(homePageUrl);
+                    IEnumerable<Ping> pings = _detailsService.GetOrderedPingResultsByTestId(latestTestId);
 
-                    _display.ShowTable("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", uniqueUrlsFromSitemap, "URL");
-                    _display.ShowTable("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", uniqueUrlsFromWebsite, "URL");
+                    _display.ShowTable("Timing", pings, "URL", "Timing");
 
-                    IEnumerable<Ping> pingsInDb = _linkService.GetPingsByUrlOrderByPing(homePageUrl);
+                    (int sitemapCount, int websiteCount) counts = _detailsService.GetUrlCounts(latestTestId);
 
-                    _display.ShowTable("Timing", pingsInDb, "URL", "Timing");
-
-                    var websiteUrlCount = links.Where(b => b.InWebsite).Count();
-                    var sitemapUrlCount = links.Where(b => b.InSitemap).Count();
-
-                    _consoleWrapper.WtiteLine($"Urls(html documents) found after crawling a website: {websiteUrlCount}");
-                    _consoleWrapper.WtiteLine($"Urls found in sitemap: {sitemapUrlCount}");
+                    _consoleWrapper.WtiteLine($"Urls(html documents) found after crawling a website: {counts.websiteCount}");
+                    _consoleWrapper.WtiteLine($"Urls found in sitemap: {counts.sitemapCount}");
                 }
                 catch (ArgumentException ex)
                 {
@@ -66,24 +74,14 @@ namespace Crawler.ConsoleApp
                     _consoleWrapper.WtiteLine(ex.Message);
                 }
 
+
+
                 _consoleWrapper.WtiteLine("Please, input website URL or press <Enter> to exit...");
 
                 input = _consoleWrapper.ReadLine();
             }
-        }
 
-        public string GetHomePageUrl(string url)
-        {
-            bool isWellFormedUrl = Uri.TryCreate(url, UriKind.Absolute, out Uri result);
-
-            if (!isWellFormedUrl)
-            {
-                throw new ArgumentException();
-            }
-
-            var homePageUrl = new Uri($"{result.Scheme}://{result.Host}").ToString();
-
-            return homePageUrl;
+            Environment.Exit(0);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Crawler.Logic
             _pingMeter = pingMeter;
         }
 
-        public async Task<IEnumerable<Ping>> MeasureLinksAsync(IEnumerable<Link> links)
+        public async Task<IEnumerable<Ping>> MeasureLinksPerformanceAsync(IEnumerable<Link> links)
         {
             var pings = new List<Ping>();
 

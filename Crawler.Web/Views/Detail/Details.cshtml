@@ -1,0 +1,98 @@
+﻿@model DetailsViewModel;
+
+<div class="text-center">
+
+    @if (Model.PingDetails.Count() > 0)
+    {
+        <div class="row text-secondary">
+            <div class="col">
+                <p class="px-3 py-4 border box-shadow">Urls found in sitemap: @Model.SitemapCount</p>
+
+            </div>
+            <div class="col">
+                <p class="px-3 py-4 border box-shadow">Urls found in website: @Model.WebsiteCount</p>
+            </div>
+        </div>
+
+        <h3 class="h3 mt-5">Performance</h3>
+        <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Url</th>
+                    <th scope="col">Timing</th>
+                </tr>
+            </thead>
+            @{
+                int i = 0;
+
+                foreach (var ping in Model.PingDetails)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@(i = i + 1)</td>
+                            <td>@ping.Url</td>
+                            <td>@ping.ResponseTimeMs</td>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+
+    }
+
+    @if (Model.SitemapDetails.Count() > 0)
+    {
+        <h3 class="h3 mt-5">Urls not found at website</h3>
+        <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th scope="col">Url</th>
+                </tr>
+            </thead>
+            @{
+                int i = 0;
+
+                foreach (var sitemapDetail in Model.SitemapDetails)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@(i = i + 1)</td>
+                            <td>@sitemapDetail</td>
+                        </tr>
+
+                    </tbody>
+                }
+            }
+        </table>
+
+    }
+
+    @if (Model.WebsiteDetails.Count() > 0)
+    {
+        <h3 class="h3 mt-5">Urls not found at sitemap</h3>
+        <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Url</th>
+                </tr>
+            </thead>
+            @{
+                int i = 0;
+
+                foreach (var websiteDetail in Model.WebsiteDetails)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@(i = i + 1)</td>
+                            <td>@websiteDetail</td>
+                        </tr>
+
+                    </tbody>
+                }
+            }
+        </table>
+    }
+</div>

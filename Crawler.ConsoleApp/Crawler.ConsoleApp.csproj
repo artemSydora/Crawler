@@ -13,10 +13,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
   </ItemGroup>
 
-  
-
   <ItemGroup>
-    <ProjectReference Include="..\Crawler.Logic\Crawler.Logic.csproj" />
+    <ProjectReference Include="..\Crawler.Service\Crawler.Service.csproj" />
   </ItemGroup>
 
 </Project>

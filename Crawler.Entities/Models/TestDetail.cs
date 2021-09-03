@@ -1,6 +1,6 @@
 ﻿namespace Crawler.Entities.Models
 {
-    public class MeasuredLink
+    public class TestDetail
     {
         public int Id { get; set; }
 

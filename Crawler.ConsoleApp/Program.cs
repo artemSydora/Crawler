@@ -2,15 +2,13 @@
 using Crawler.Logic.Crawlers.Sitemap;
 using Crawler.Logic.Crawlers.Website;
 using Crawler.Repository;
+using Crawler.Service.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Crawler.ConsoleApp
 {
@@ -30,13 +28,16 @@ namespace Crawler.ConsoleApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddScoped<DataAccess>();
+                    services.AddScoped<DataAccessor>();
                     services.AddEfRepository<CrawlerDbContext>(options =>
                     {
-                        options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString"));
+                        options.UseSqlServer("Data Source=DESKTOP-G7JJCOH\\MSSQLSERVER01; Initial Catalog=CrawlerDB; Trusted_Connection=True;");
                     });
 
-                    services.AddScoped<LinkService>();
+                    services.AddScoped<TestsService>();
+                    services.AddScoped<DetailsService>();
+                    services.AddScoped<InputValidationService>();
+
                     services.AddScoped<WebsiteCrawler>();
                     services.AddScoped<SitemapsCrawler>();
                     services.AddScoped<LinkCollector>();
@@ -47,9 +48,6 @@ namespace Crawler.ConsoleApp
                     services.AddSingleton<ContentLoader>();
                     services.AddScoped<PingMeter>(); ;
                     services.AddScoped<PingCollector>();
-                    services.AddScoped<Stopwatch>();
-                    services.AddScoped<XmlDocument>();
-                    services.AddSingleton<HttpClient>();
 
                     services.AddScoped<ConsoleApp>();
                     services.AddScoped<Display>();

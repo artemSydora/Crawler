@@ -10,8 +10,4 @@
     <PackageReference Include="ConsoleTables" Version="2.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Crawler.Repository\Crawler.Repository.csproj" />
-  </ItemGroup>
 </Project>

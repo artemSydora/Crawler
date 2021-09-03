@@ -1,0 +1,29 @@
+﻿@model Input;
+
+<div>
+    <form class="form-inline text-right"
+          asp-controller="Test"
+          asp-action="Index"
+          method="Post">
+        @if (ViewContext.ViewData.ModelState.IsValid)
+        {
+            <label class="text-success">Enter a website:</label>
+            <input class="form-control border-success my-1 mx-sm-4" name="url" asp-for="Url" />
+            <button class="btn btn-outline-success" type="submit">Test</button>
+        }
+        else
+        {
+            <label class="text-danger">Enter a website:</label>
+            <input class="form-control border-danger my-1 mx-sm-4" name="url" asp-for="Url"
+                   data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="@{
+//ViewContext.ViewData.ModelState.Values
+//    .SelectMany(ms => ms.Errors)
+//    .SingleOrDefault()
+//    .ErrorMessage;
+                           } " />
+            <button class="btn btn-outline-danger" type="submit">Test</button>
+        }
+    </form>
+</div>

@@ -12,7 +12,7 @@ namespace Crawler.Logic.Tests
 
         public PingCollectorTests()
         {
-            _mockTimeMeter = new Mock<PingMeter>(null, null);
+            _mockTimeMeter = new Mock<PingMeter>(null);
             _pingCollector = new PingCollector(_mockTimeMeter.Object);
         }
 
@@ -34,7 +34,7 @@ namespace Crawler.Logic.Tests
                 .ReturnsAsync(It.IsAny<Ping>());
 
             //act
-            var actual = await _pingCollector.MeasureLinksAsync(fakeLinkCollection);
+            var actual = await _pingCollector.MeasureLinksPerformanceAsync(fakeLinkCollection);
 
             //assert
             _mockTimeMeter.Verify(tm => tm.Measure(It.IsAny<Link>()), Times.Exactly(fakeLinkCollection.Length));

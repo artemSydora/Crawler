@@ -12,9 +12,9 @@ namespace Crawler.Repository
             Database.Migrate();
         }
 
-        public DbSet<Test> Tests { get; set; }
+        public DbSet<TestResult> Tests { get; set; }
 
-        public DbSet<MeasuredLink> LinkPerformanceResults { get; set; }
+        public DbSet<TestDetail> LinkPerformanceResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
