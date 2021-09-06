@@ -1,13 +1,7 @@
-﻿using Crawler.Logic;
-using Crawler.Logic.Crawlers.Sitemap;
-using Crawler.Logic.Crawlers.Website;
-using Crawler.Repository;
-using Crawler.Service.Services;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace Crawler.ConsoleApp
@@ -28,26 +22,13 @@ namespace Crawler.ConsoleApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddScoped<DataAccessor>();
-                    services.AddEfRepository<CrawlerDbContext>(options =>
-                    {
-                        options.UseSqlServer("WONDERWAFFEL\\SQLEXPRESS; Initial Catalog=CrawlerDB; Trusted_Connection=True;");
-                    });
+                    IConfiguration configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
 
-                    services.AddScoped<TestsService>();
-                    services.AddScoped<DetailsService>();
-                    services.AddScoped<InputValidationService>();
-
-                    services.AddScoped<WebsiteCrawler>();
-                    services.AddScoped<SitemapsCrawler>();
-                    services.AddScoped<LinkCollector>();
-                    services.AddScoped<XmlDocParser>();
-                    services.AddScoped<HtmlDocParser>();
-                    services.AddScoped<RobotsParser>();
-                    services.AddScoped<Verifier>();
-                    services.AddSingleton<ContentLoader>();
-                    services.AddScoped<PingMeter>(); ;
-                    services.AddScoped<PingCollector>();
+                    services.AddRepository(configuration);
+                    services.AddLogic();
+                    services.AddServices();
 
                     services.AddScoped<ConsoleApp>();
                     services.AddScoped<Display>();
