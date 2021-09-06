@@ -1,4 +1,5 @@
 ﻿using Crawler.Entities.Models;
+using Crawler.Logic;
 using Crawler.Logic.Models;
 using Crawler.Repository;
 using Crawler.Service.Models;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Service.Tests
 {
     public class TestServiceTests
     {

@@ -6,7 +6,7 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Service.Tests
 {
     public class DetailsServiceTests
     {
@@ -85,6 +85,27 @@ namespace Crawler.Logic.Tests
             //assert
             Assert.Collection(actual,
                 link => Assert.Equal("2", link));
+        }
+
+        [Fact]
+        public void Get_ReturnPingsCollection()
+        {
+            //arrange
+            var fakeMeaseredLinkCollection = GetFakeMeasuredLinks();
+
+            _mockDataAccessor
+                .Setup(rda => rda.GetTestById(It.IsAny<int>()))
+                .Returns(new TestResult
+                {
+                    TestDetails = fakeMeaseredLinkCollection
+                });
+
+            //act
+            (int sitemapCount, int websiteCount) actual = _detailService.GetUrlCounts(default);
+
+            //assert
+            Assert.Equal(2, actual.sitemapCount);
+            Assert.Equal(2, actual.websiteCount);
         }
 
         #region FakeData

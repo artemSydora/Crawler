@@ -31,7 +31,7 @@ namespace Crawler.ConsoleApp
                     services.AddScoped<DataAccessor>();
                     services.AddEfRepository<CrawlerDbContext>(options =>
                     {
-                        options.UseSqlServer("Data Source=DESKTOP-G7JJCOH\\MSSQLSERVER01; Initial Catalog=CrawlerDB; Trusted_Connection=True;");
+                        options.UseSqlServer("WONDERWAFFEL\\SQLEXPRESS; Initial Catalog=CrawlerDB; Trusted_Connection=True;");
                     });
 
                     services.AddScoped<TestsService>();

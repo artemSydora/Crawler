@@ -31,7 +31,7 @@ namespace Crawler.Web
             services.AddScoped<DataAccessor>();
             services.AddEfRepository<CrawlerDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("CrawlerDBConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("HomeDBConnection"));
             });
 
             services.AddScoped<TestsService>();

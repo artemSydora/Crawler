@@ -38,7 +38,7 @@ namespace Crawler.Web.Controllers
             }
             else
             {
-                ModelState.AddModelError("Url", "Invalid input");
+                ModelState.AddModelError("Url", _userInputService.ErrorMessage);
             }
 
             var page = await _testService.GetPageAsync(1, 10);

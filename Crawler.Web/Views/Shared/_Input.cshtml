@@ -17,12 +17,7 @@
             <input class="form-control border-danger my-1 mx-sm-4" name="url" asp-for="Url"
                    data-toggle="tooltip"
                    data-placement="bottom"
-                   title="@{
-//ViewContext.ViewData.ModelState.Values
-//    .SelectMany(ms => ms.Errors)
-//    .SingleOrDefault()
-//    .ErrorMessage;
-                           } " />
+                   title="@ViewContext.ViewData.ModelState.Values.SelectMany(ms => ms.Errors).SingleOrDefault().ErrorMessage" />
             <button class="btn btn-outline-danger" type="submit">Test</button>
         }
     </form>
