@@ -1,4 +1,5 @@
-﻿using Crawler.Logic.Models;
+﻿using Crawler.Entities.Models;
+using Crawler.Logic.Models;
 using Crawler.Service.Services;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,13 @@ namespace Crawler.ConsoleApp
         private readonly Display _display;
         private readonly ConsoleWrapper _consoleWrapper;
         private readonly TestsService _testsService;
-        private readonly DetailsService _detailsService;
         private readonly InputValidationService _inputValidationService;
 
-        public ConsoleApp(Display display, ConsoleWrapper consoleWrapper, TestsService testsService, DetailsService detailsService, InputValidationService inputValidationService)
+        public ConsoleApp(Display display, ConsoleWrapper consoleWrapper, TestsService testsService, InputValidationService inputValidationService)
         {
             _display = display;
             _consoleWrapper = consoleWrapper;
             _testsService = testsService;
-            _detailsService = detailsService;
             _inputValidationService = inputValidationService;
         }
 
@@ -38,32 +37,50 @@ namespace Crawler.ConsoleApp
 
                     if (!isValidInput)
                     {
-                        _consoleWrapper.WtiteLine("Invalid input url");
+                        _consoleWrapper.WtiteLine(_inputValidationService.ErrorMessage);
                     }
                     else
                     {
                         await _testsService.SaveTestResults(input);
-                       
+
+
+
+                        int latestTestId = _testsService
+                                .GetAllTests()
+                                .Max(t => t.Id);
+
+                        IEnumerable<TestDetail> details = _testsService.GetDetailsByTestId(latestTestId);
+
+                        IEnumerable<string> urlsFromSitemap = details
+                            .Where(td => !td.InWebsite)
+                            .Select(td => td.Url);
+                        IEnumerable<string> urlsFromWebsite = details
+                            .Where(td => !td.InSitemap)
+                            .Select(td => td.Url);
+
+                        _display.ShowTable("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", urlsFromSitemap, "URL");
+                        _display.ShowTable("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", urlsFromWebsite, "URL");
+
+                        IEnumerable<Ping> pings = details
+                            .Select(td => new Ping
+                            {
+                                Url = td.Url,
+                                ResponseTimeMs = td.ResponseTimeMs
+                            });
+
+                        _display.ShowTable("Timing", pings, "URL", "Timing");
+
+                        var sitemapCount = details
+                            .Where(td => td.InSitemap)
+                            .Count();
+
+                        var websiteCount = details
+                            .Where(td => td.InWebsite)
+                            .Count();
+
+                        _consoleWrapper.WtiteLine($"Urls(html documents) found after crawling a website: {websiteCount}");
+                        _consoleWrapper.WtiteLine($"Urls found in sitemap: {sitemapCount}");
                     }
-                
-                        var latestTestId = _testsService
-                            .GetAllTests()
-                            .Max(t => t.Id);
-                    
-                    IEnumerable<string> urlsFromSitemap = _detailsService.GetUniqueSitemapUrlsByTestId(latestTestId);
-                    IEnumerable<string> urlsFromWebsite = _detailsService.GetUniqueWebsiteUrlsByTestId(latestTestId);
-
-                    _display.ShowTable("Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", urlsFromSitemap, "URL");
-                    _display.ShowTable("Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", urlsFromWebsite, "URL");
-
-                    IEnumerable<Ping> pings = _detailsService.GetOrderedPingResultsByTestId(latestTestId);
-
-                    _display.ShowTable("Timing", pings, "URL", "Timing");
-
-                    (int sitemapCount, int websiteCount) counts = _detailsService.GetUrlCounts(latestTestId);
-
-                    _consoleWrapper.WtiteLine($"Urls(html documents) found after crawling a website: {counts.websiteCount}");
-                    _consoleWrapper.WtiteLine($"Urls found in sitemap: {counts.sitemapCount}");
                 }
                 catch (ArgumentException ex)
                 {
@@ -72,9 +89,7 @@ namespace Crawler.ConsoleApp
                 catch (HttpRequestException ex)
                 {
                     _consoleWrapper.WtiteLine(ex.Message);
-                }
-
-
+                } 
 
                 _consoleWrapper.WtiteLine("Please, input website URL or press <Enter> to exit...");
 

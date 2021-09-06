@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Crawler.Logic
@@ -26,6 +27,22 @@ namespace Crawler.Logic
 
             return content;
         }
+
+        public virtual async Task<Uri> GetRequestUri(string url)
+        {
+            using (var response = await _client.GetAsync(url))
+            {
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    var requestUri = response
+                        .RequestMessage
+                        .RequestUri;
+
+                    return requestUri;
+                }
+            }
+
+            throw new HttpRequestException();
+        }
     }
 }
-

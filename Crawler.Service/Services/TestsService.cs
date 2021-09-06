@@ -71,5 +71,14 @@ namespace Crawler.Service.Services
 
             await _dataAccess.SaveTestResultsAsync(startPageUrl, measuredLinks);
         }
+
+        public IEnumerable<TestDetail> GetDetailsByTestId(int id)
+        {
+            var testDetails = _dataAccess
+                .GetTestById(id)
+                .TestDetails;
+
+            return testDetails;
+        }
     }
 }

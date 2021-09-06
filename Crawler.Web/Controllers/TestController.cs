@@ -1,9 +1,6 @@
-﻿using Crawler.Service.Models;
-using Crawler.Service.Services;
+﻿using Crawler.Service.Services;
 using Crawler.Web.Models;
-using Crawler.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Crawler.Web.Controllers

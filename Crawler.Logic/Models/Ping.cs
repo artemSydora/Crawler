@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Crawler.Logic.Models
+﻿namespace Crawler.Logic.Models
 {
     public class Ping
     {

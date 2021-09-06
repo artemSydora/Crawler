@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Crawler.Repository
 {
-    public class MeasuredLinkConfiguration : IEntityTypeConfiguration<TestDetail>
+    public class TestDetailConfiguration : IEntityTypeConfiguration<TestDetail>
     {
         public void Configure(EntityTypeBuilder<TestDetail> builder)
         {

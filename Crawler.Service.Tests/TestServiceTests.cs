@@ -31,7 +31,25 @@ namespace Crawler.Service.Tests
         public async Task GetPageAsync_ShouldReturnPageModel()
         {
             //arrange
-            var fakeTests = GetFakeTestResults();
+            var fakeTests = new List<TestResult>
+            {
+                new TestResult
+                {
+                    Id = 1,
+                    DateTime = System.DateTime.Today,
+                    StartPageUrl = "1",
+                    TestDetails = new List<TestDetail>{new TestDetail(), new TestDetail(), new TestDetail() }
+                },
+
+                new TestResult
+                {
+                    Id = 2,
+                    DateTime = System.DateTime.Today,
+                    StartPageUrl = "2",
+                    TestDetails = new List<TestDetail>{ new TestDetail(), new TestDetail(), new TestDetail()}
+                }
+            };
+
             var totalTests = 16;
             var pageSize = 5;
             var pageNumber = 3;
@@ -62,8 +80,6 @@ namespace Crawler.Service.Tests
             var fakeLinks = new[] { new Link() };
             var fakePings = new[] { new Ping() };
 
-
-            //_mockLinkCollector
             _mockDataAccessor
                .Setup(rda => rda.SaveTestResultsAsync(It.IsAny<string>(), It.IsAny<IEnumerable<TestDetail>>()));
 
@@ -75,32 +91,31 @@ namespace Crawler.Service.Tests
                 .Verify(rda => rda.SaveTestResultsAsync(It.IsAny<string>(), It.IsAny<IEnumerable<TestDetail>>()), Times.Once);
         }
 
-        #region FakeData
-
-        private IList<TestResult> GetFakeTestResults()
+        [Fact]
+        public void GetDetailsByTestId_ReturnDetailsCollection()
         {
-            var fakeTestResults = new List<TestResult>
-            {
-                new TestResult
-                {
-                    Id = 1,
-                    DateTime = System.DateTime.Today,
-                    StartPageUrl = "1",
-                    TestDetails = new List<TestDetail>{new TestDetail(), new TestDetail(), new TestDetail() }
-                },
-
-                new TestResult
-                {
-                    Id = 2,
-                    DateTime = System.DateTime.Today,
-                    StartPageUrl = "2",
-                    TestDetails = new List<TestDetail>{ new TestDetail(), new TestDetail(), new TestDetail()}
-                }
+            //arrange
+            var fakeDetails = new List<TestDetail>
+           {
+                new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
+                new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
+                new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
             };
+            _mockDataAccessor
+                .Setup(rda => rda.GetTestById(It.IsAny<int>()))
+                .Returns(new TestResult
+                {
+                    TestDetails = fakeDetails
+                });
 
-            return fakeTestResults;
+            //act
+            IEnumerable<TestDetail> actual = _testService.GetDetailsByTestId(default);
+
+            //assert
+            Assert.Collection(actual,
+                result => Assert.Equal(new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true }, result),
+                result => Assert.Equal(new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true }, result),
+                result => Assert.Equal(new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }, result));
         }
-
-        #endregion
     }
 }

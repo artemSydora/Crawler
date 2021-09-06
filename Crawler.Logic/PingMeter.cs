@@ -19,7 +19,7 @@ namespace Crawler.Logic
         {
             _timer.Start();
 
-            var response = await _contentLoader.GetContentAsync(link.Url);
+            await _contentLoader.GetContentAsync(link.Url);
 
             _timer.Stop();
             

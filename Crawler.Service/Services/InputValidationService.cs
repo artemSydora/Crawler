@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crawler.Logic;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -6,21 +7,23 @@ namespace Crawler.Service.Services
 {
     public class InputValidationService
     {
-        private readonly HttpClient _client;
+        private readonly ContentLoader _contentLoader;
 
         public string ErrorMessage { get; private set; }
 
-        public InputValidationService()
+        public InputValidationService(ContentLoader contentLoader)
         {
-            _client = new HttpClient();
             ErrorMessage = String.Empty;
+
+            _contentLoader = contentLoader;
         }
+
         public async Task<bool> VerifyUlr(string url)
         {
-            if(String.IsNullOrEmpty(url))
+            if (String.IsNullOrEmpty(url))
             {
                 ErrorMessage = "Input url cannot be empty";
-                
+
                 return false;
             }
 
@@ -33,44 +36,34 @@ namespace Crawler.Service.Services
                 return false;
             }
 
-            var startPageUrl = $"https://{result.DnsSafeHost}";
+            return await TryCompareUrls($"https://{result.DnsSafeHost}");          
+        }
+
+        private async Task<bool> TryCompareUrls(string url)
+        {
+            var inputUri = new Uri(url);
 
             try
             {
-                return await TryCompareUrls(startPageUrl);
+                var startPageUri = await _contentLoader.GetRequestUri(url);
+               
+                var comparisonResult = Uri.Compare(startPageUri, inputUri, UriComponents.SchemeAndServer,
+                UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
+                if (comparisonResult != 0)
+                {
+                    ErrorMessage = "Wrong scheme or host name";
+
+                    return false;
+                }
+
+                return true;
             }
             catch (HttpRequestException)
             {
                 ErrorMessage = "Unknown host";
 
                 return false;
-            }
-        }
-
-        private async Task<bool> TryCompareUrls(string url)
-        {
-            using (var response = await _client.GetAsync(url))
-            {
-                if (response != null && response.IsSuccessStatusCode)
-                {
-                    var inputUri = new Uri(url);
-                    var startPageUri = response
-                        .RequestMessage
-                        .RequestUri;
-
-                    var comparisonResult = Uri.Compare(startPageUri, inputUri, UriComponents.SchemeAndServer,
-                        UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
-                    if(comparisonResult != 0)
-                    {
-                        ErrorMessage = "Wrong scheme or host name";
-
-                        return false;
-                    }
-                    return true;
-                }
-            }
-
-            return false;
+            }         
         }
     }
 }
