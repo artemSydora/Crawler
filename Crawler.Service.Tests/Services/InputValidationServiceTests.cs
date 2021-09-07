@@ -6,7 +6,7 @@ using Moq;
 using System.Net.Http;
 using Crawler.Logic;
 
-namespace Crawler.Service.Tests
+namespace Crawler.Service.Tests.Services
 {
     public class InputValidationServiceTests
     {
@@ -19,7 +19,7 @@ namespace Crawler.Service.Tests
             _inputValidationService = new InputValidationService(_mockContentLoader.Object);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task VerifyUlr_InputUrlIsNullOrEmpty_SetErrorMessageAndReturnFalse()
         {
             //arrange
@@ -39,7 +39,7 @@ namespace Crawler.Service.Tests
             Assert.Equal("Input url cannot be empty", actualErrorMessage);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task VerifyUrl_InputUrlWrongUriFormat_SetErrorMessageAndReturnFalse()
         {
             //arrange
@@ -56,7 +56,7 @@ namespace Crawler.Service.Tests
             Assert.Equal("Wrong url format", actualErrorMessage);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task VerifyUrl_InputNotExistedUrl_SetErrorMessageAndReturnFalse()
         {
             //arrange
@@ -76,7 +76,7 @@ namespace Crawler.Service.Tests
             Assert.Equal("Unknown host", actualErrorMessage);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task VerifyUrl_InputUrlDoesNotMatchWithRequestUri_SetErrorMessageAndReturnFalse()
         {
             //arrange
@@ -96,7 +96,7 @@ namespace Crawler.Service.Tests
             Assert.Equal("Wrong scheme or host name", actualErrorMessage);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task VerifyUrl_InputUrlDoesMatchWithRequestUri_ReturnTrue()
         {
             //arrange

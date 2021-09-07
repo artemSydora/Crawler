@@ -3,7 +3,7 @@ using System;
 using Xunit;
 using static Crawler.Logic.Crawlers.Sitemap.XmlDocParser;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Logic.Tests.Crawlers.Sitemap
 {
     public class XmlDocParserTests
     {

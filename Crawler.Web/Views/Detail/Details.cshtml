@@ -1,13 +1,11 @@
 ﻿@model IEnumerable<TestDetail>;
 
 <div class="text-center">
-
     @if (Model.Count() > 0)
     {
-        <div class="row text-secondary">
+        <div class="row text-secondary">        
             <div class="col">
                 <p class="px-3 py-4 border box-shadow">Urls found in sitemap: @Model.Where(td => td.InSitemap).Count()</p>
-
             </div>
             <div class="col">
                 <p class="px-3 py-4 border box-shadow">Urls found in website: @Model.Where(td => td.InWebsite).Count()</p>
@@ -15,7 +13,8 @@
         </div>
 
         <h3 class="h3 mt-5">Performance</h3>
-        <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
+
+        <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">     
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -43,12 +42,12 @@
                 }
             }
         </table>
-
     }
 
     @if (Model.Where(td => !td.InWebsite).Count() > 0)
     {
         <h3 class="h3 mt-5">Urls not found at website</h3>
+
         <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
             <thead>
                 <tr>
@@ -71,12 +70,12 @@
                 }
             }
         </table>
-
     }
 
     @if (Model.Where(td => !td.InSitemap).Count() > 0)
     {
         <h3 class="h3 mt-5">Urls not found at sitemap</h3>
+
         <table class="table table-bordered box-shadow table-hover table-sm text-left text-dark">
             <thead>
                 <tr>

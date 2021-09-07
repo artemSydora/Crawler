@@ -2,7 +2,7 @@
 using System;
 using Xunit;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Logic.Tests.Crawlers.Sitemap
 {
     public class RobotsParserTests
     {

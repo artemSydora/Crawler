@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<DataAccessor>();
             services.AddEfRepository<CrawlerDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("HomeDBConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("WorkDBConnection"));
             });
 
             return services;

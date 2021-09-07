@@ -3,7 +3,7 @@ using Moq;
 using System;
 using Xunit;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Logic.Tests.Crawlers.Website
 {
     public class HtmlDocParserTests
     {

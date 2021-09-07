@@ -5,7 +5,7 @@ using Xunit;
 using Moq;
 using Crawler.Logic.Crawlers.Website;
 
-namespace Crawler.Logic.Tests
+namespace Crawler.Logic.Tests.Crawlers.Website
 {
     public class WebsiteCrawlerTests
     {

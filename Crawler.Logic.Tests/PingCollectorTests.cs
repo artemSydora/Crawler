@@ -16,7 +16,7 @@ namespace Crawler.Logic.Tests
             _pingCollector = new PingCollector(_mockTimeMeter.Object);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task MeasureLinksAsync_ShouldMeasureAllLinks()
         {
             //arrange

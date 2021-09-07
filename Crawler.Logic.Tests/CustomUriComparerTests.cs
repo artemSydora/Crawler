@@ -12,7 +12,7 @@ namespace Crawler.Logic.Tests
             _comparer = new CustomUriComparer();
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void Equals_ShouldIgnoreSchemeWhenConpareUri()
         {
             //arrange
@@ -26,7 +26,7 @@ namespace Crawler.Logic.Tests
             Assert.True(result);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetHashCode_ShouldCombineHostAndAbsolutePathHasCodes()
         {
             //act

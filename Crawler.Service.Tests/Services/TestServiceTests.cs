@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Crawler.Service.Tests
+namespace Crawler.Service.Tests.Services
 {
     public class TestServiceTests
     {
@@ -27,7 +27,7 @@ namespace Crawler.Service.Tests
 
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task GetPageAsync_ShouldReturnPageModel()
         {
             //arrange
@@ -72,7 +72,7 @@ namespace Crawler.Service.Tests
                 testResult => Assert.Equal(fakeTests[1], testResult));
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task SaveTestResultsAsync_ShouldSaveResultsToDatabase()
         {
             //arrange
@@ -91,7 +91,7 @@ namespace Crawler.Service.Tests
                 .Verify(rda => rda.SaveTestResultsAsync(It.IsAny<string>(), It.IsAny<IEnumerable<TestDetail>>()), Times.Once);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetDetailsByTestId_ReturnDetailsCollection()
         {
             //arrange
