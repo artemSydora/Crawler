@@ -33,7 +33,7 @@ namespace Crawler.ConsoleApp
             {
                 try
                 {
-                    var isValidInput = await _inputValidationService.VerifyUlr(input);
+                    var isValidInput = await _inputValidationService.VerifyUrl(input);
 
                     if (!isValidInput)
                     {

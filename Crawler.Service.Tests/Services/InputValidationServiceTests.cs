@@ -29,7 +29,7 @@ namespace Crawler.Service.Tests.Services
                 .ReturnsAsync(It.IsAny<Uri>());
             
             //actual
-            var actualVerifyStatus = await _inputValidationService.VerifyUlr(inputUrl);
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
 
             //assert
@@ -46,7 +46,7 @@ namespace Crawler.Service.Tests.Services
             var inputUrl = "qwe/rty.com";
 
             //actual
-            var actualVerifyStatus = await _inputValidationService.VerifyUlr(inputUrl);
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
 
             //assert
@@ -66,7 +66,7 @@ namespace Crawler.Service.Tests.Services
                 .Throws(new HttpRequestException());
 
             //actual
-            var actualVerifyStatus = await _inputValidationService.VerifyUlr(inputUrl);
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
 
             //assert
@@ -86,7 +86,7 @@ namespace Crawler.Service.Tests.Services
                 .ReturnsAsync(new Uri("https://www.google.com"));
 
             //actual
-            var actualVerifyStatus = await _inputValidationService.VerifyUlr(inputUrl);
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
 
             //assert
@@ -106,7 +106,7 @@ namespace Crawler.Service.Tests.Services
                 .ReturnsAsync(new Uri("https://www.google.com"));
 
             //actual
-            var actualVerifyStatus = await _inputValidationService.VerifyUlr(inputUrl);
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
 
             //assert

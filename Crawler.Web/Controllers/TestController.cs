@@ -27,7 +27,7 @@ namespace Crawler.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Input input)
         {
-            var isValidUrl = await _userInputService.VerifyUlr(input.Url);
+            var isValidUrl = await _userInputService.VerifyUrl(input.Url);
 
             if (isValidUrl)
             {

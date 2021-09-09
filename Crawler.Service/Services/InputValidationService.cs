@@ -18,7 +18,7 @@ namespace Crawler.Service.Services
             _contentLoader = contentLoader;
         }
 
-        public async Task<bool> VerifyUlr(string url)
+        public async Task<bool> VerifyUrl(string url)
         {
             if (String.IsNullOrEmpty(url))
             {
