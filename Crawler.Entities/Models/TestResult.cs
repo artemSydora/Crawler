@@ -7,7 +7,7 @@ namespace Crawler.Entities.Models
     {
         public TestResult()
         {
-            TestDetails = new List<TestDetail>();  
+            TestDetails = new List<TestDetail>();
         }
 
         public int Id { get; set; }
@@ -17,6 +17,13 @@ namespace Crawler.Entities.Models
         public DateTime DateTime { get; set; }
 
         public ICollection<TestDetail> TestDetails { get; set; }
+
+        public TestResult(string startPageUrl, DateTime dateTime, ICollection<TestDetail> testDetails)
+        {
+            StartPageUrl = startPageUrl;
+            DateTime = dateTime;
+            TestDetails = testDetails;
+        }
 
         public override bool Equals(object obj)
         {
