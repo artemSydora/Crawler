@@ -18,8 +18,7 @@ namespace Crawler.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new TestDetailConfiguration());
-            modelBuilder.ApplyConfiguration(new TestResultConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CrawlerDbContext).Assembly);
         }
     }
 }
