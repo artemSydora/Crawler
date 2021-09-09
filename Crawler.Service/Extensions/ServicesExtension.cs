@@ -1,6 +1,7 @@
 ﻿using Crawler.Service.Services;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Crawler.Service.Extensions
 {
     public static class ServicesExtension
     {

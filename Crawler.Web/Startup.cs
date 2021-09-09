@@ -1,3 +1,6 @@
+using Crawler.Logic.Extensions;
+using Crawler.Repository.Extensions;
+using Crawler.Service.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

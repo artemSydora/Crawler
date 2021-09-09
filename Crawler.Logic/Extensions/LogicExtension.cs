@@ -1,8 +1,8 @@
-﻿using Crawler.Logic;
-using Crawler.Logic.Crawlers.Sitemap;
+﻿using Crawler.Logic.Crawlers.Sitemap;
 using Crawler.Logic.Crawlers.Website;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Crawler.Logic.Extensions
 {
     public static class LogicExtension
     {
