@@ -1,6 +1,7 @@
 ﻿using Crawler.Service.Services;
 using Crawler.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Crawler.Web.Controllers
@@ -31,7 +32,7 @@ namespace Crawler.Web.Controllers
 
             if (isValidUrl)
             {
-                await _testService.SaveTestResults(input.Url);
+                await _testService.SaveTestResultsAsync(input.Url);
             }
             else
             {

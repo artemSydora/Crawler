@@ -41,7 +41,7 @@ namespace Crawler.ConsoleApp
                     }
                     else
                     {
-                        await _testsService.SaveTestResults(input);
+                        await _testsService.SaveTestResultsAsync(input);
 
 
 
