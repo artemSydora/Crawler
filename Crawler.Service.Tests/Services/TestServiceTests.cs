@@ -75,7 +75,7 @@ namespace Crawler.Service.Tests.Services
         }
 
         [Fact(Timeout = 1000)]
-        public void GetDetailsByTestId_ReturnDetailsCollection()
+        public void GetDetailsByTestId_InputExistingId_ReturnDetailsCollection()
         {
             //arrange
             IQueryable<TestResult> testResult = new List<TestResult>
@@ -105,6 +105,36 @@ namespace Crawler.Service.Tests.Services
                 result => Assert.Equal(new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true }, result),
                 result => Assert.Equal(new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true }, result),
                 result => Assert.Equal(new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }, result));
+        }
+
+        [Fact(Timeout = 1000)]
+        public void GetDetailsByTestId_InputNotExistingId_ReturnEmptyCollection()
+        {
+            //arrange
+            IQueryable<TestResult> testResult = new List<TestResult>
+            {
+                new TestResult
+                {
+                    Id = 1,
+                    TestDetails = new List<TestDetail>
+                    {
+                    new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
+                    new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
+                    new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
+                    }
+                }
+            }
+            .AsQueryable();
+
+            _mockRepository
+                .Setup(r => r.Include(tr => tr.TestDetails))
+                .Returns(testResult);
+
+            //act
+            IEnumerable<TestDetail> actual = _testService.GetDetailsByTestId(2);
+
+            //assert
+            Assert.Empty(actual);
         }
     }
 }

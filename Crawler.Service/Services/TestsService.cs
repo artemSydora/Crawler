@@ -11,20 +11,20 @@ namespace Crawler.Service.Services
 {
     public class TestsService
     {
-        private readonly IRepository<TestResult> _repository;
+        private readonly IRepository<TestResult> _testResultsRepository;
         private readonly LinkCollector _linkCollector;
         private readonly PingCollector _pingCollector;
 
-        public TestsService(IRepository<TestResult> repository, LinkCollector linkCollector, PingCollector pingCollector)
+        public TestsService(IRepository<TestResult> testsResultsRepository, LinkCollector linkCollector, PingCollector pingCollector)
         {
-            _repository = repository;
+            _testResultsRepository = testsResultsRepository;
             _linkCollector = linkCollector;
             _pingCollector = pingCollector;
         }
 
         public IEnumerable<TestResult> GetAllTests()
         {
-            var tests = _repository
+            var tests = _testResultsRepository
                 .GetAll();
 
             return tests;
@@ -32,9 +32,9 @@ namespace Crawler.Service.Services
 
         public async Task<PageModel> GetPageAsync(int pageNumber, int pageSize)
         {
-            var tests = _repository.Include(t => t.TestDetails);
+            var tests = _testResultsRepository.Include(t => t.TestDetails);
 
-            var page = await _repository
+            var page = await _testResultsRepository
                 .GetPageAsync(tests, pageNumber, pageSize);
 
             var totalPages = (int)Math.Ceiling(page.TotalCount / (double)pageSize);
@@ -53,23 +53,22 @@ namespace Crawler.Service.Services
                     InSitemap = link.InSitemap,
                     InWebsite = link.InWebsite,
                     Url = link.Url,
-                    ResponseTimeMs = pings.ToHashSet().SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
+                    ResponseTimeMs = pings.SingleOrDefault(ping => ping.Url == link.Url).ResponseTimeMs
                 })
                 .ToList();
 
-            await _repository.AddAsync(new TestResult(startPageUrl, DateTime.Now, details));
+            await _testResultsRepository.AddAsync(new TestResult(startPageUrl, DateTime.Now, details));
 
-            await _repository.SaveChangesAsync();
+            await _testResultsRepository.SaveChangesAsync();
         }
 
         public IEnumerable<TestDetail> GetDetailsByTestId(int id)
         {
-            var testDetails = _repository
+            var testResult = _testResultsRepository
                 .Include(t => t.TestDetails)
-                .FirstOrDefault(t => t.Id == id)
-                .TestDetails;
+                .FirstOrDefault(t => t.Id == id);
 
-            return testDetails;
+            return testResult != null ? testResult.TestDetails : Array.Empty<TestDetail>();
         }
     }
 }
