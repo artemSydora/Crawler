@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Crawler.EntityConfigurations
+namespace Crawler.Repository.EntityConfigurations
 {
     public class TestResultConfiguration : IEntityTypeConfiguration<TestResult>
     {
