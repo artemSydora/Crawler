@@ -31,37 +31,17 @@ namespace Crawler.Logic
 
         private IEnumerable<Link> MergeLinks(IEnumerable<Uri> urlsFromWebsite, IEnumerable<Uri> urlsFromSitemap, IEqualityComparer<Uri> comparer)
         {
-            List<Link> allLinks = urlsFromSitemap
-                .Intersect(urlsFromWebsite, comparer)
+            var allLinks = urlsFromSitemap
+                .Union(urlsFromWebsite, comparer)
                 .Select(uri => new Link
                 {
-                    InSitemap = true,
-                    InWebsite = true,
-                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
+                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}",
+                    InSitemap = urlsFromSitemap.Contains(uri, comparer),
+                    InWebsite = urlsFromWebsite.Contains(uri, comparer)
                 })
-                .ToList();
+                .ToHashSet();
 
-            allLinks
-                .AddRange(urlsFromSitemap
-                .Except(urlsFromWebsite, comparer)
-                .Select(uri => new Link
-                {
-                    InSitemap = true,
-                    InWebsite = false,
-                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
-                }));
-
-            allLinks
-                .AddRange(urlsFromWebsite
-                .Except(urlsFromSitemap, comparer)
-                .Select(uri => new Link
-                {
-                    InSitemap = false,
-                    InWebsite = true,
-                    Url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}"
-                }));
-
-            return allLinks.ToHashSet();
+            return allLinks;
         }
     }
 }

@@ -140,8 +140,8 @@ namespace Crawler.Logic.Tests
         {
             var fakeUrisFromSitemap = new[]
             {
-            new Uri("http://www.example.com/About"),
-            new Uri("http://www.example.com/")
+                new Uri("http://www.example.com/"),
+                new Uri("http://www.example.com/About")
             };
 
             return fakeUrisFromSitemap;
@@ -151,8 +151,8 @@ namespace Crawler.Logic.Tests
         {
             var fakeUrisFromWebsite = new[]
             {
-            new Uri("https://www.example.com/Home/"),
-            new Uri("https://www.example.com/")
+                new Uri("https://www.example.com/"),
+                new Uri("https://www.example.com/Home/")
             };
 
             return fakeUrisFromWebsite;
