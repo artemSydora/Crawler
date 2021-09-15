@@ -1,10 +1,10 @@
-﻿using Crawler.Service.Services;
-using System;
-using System.Threading.Tasks;
-using Xunit;
-using Moq;
+﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Crawler.Logic;
+using Crawler.Service.Services;
+using Moq;
+using Xunit;
 
 namespace Crawler.Service.Tests.Services
 {
@@ -14,7 +14,7 @@ namespace Crawler.Service.Tests.Services
         private readonly Mock<ContentLoader> _mockContentLoader;
 
         public InputValidationServiceTests()
-        {         
+        {
             _mockContentLoader = new Mock<ContentLoader>();
             _inputValidationService = new InputValidationService(_mockContentLoader.Object);
         }
@@ -27,7 +27,7 @@ namespace Crawler.Service.Tests.Services
             _mockContentLoader
                 .Setup(cl => cl.GetRequestUri(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<Uri>());
-            
+
             //actual
             var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
             var actualErrorMessage = _inputValidationService.ErrorMessage;
@@ -61,7 +61,7 @@ namespace Crawler.Service.Tests.Services
         {
             //arrange
             var inputUrl = "https://mnbvcxz.com";
-            var response = _mockContentLoader
+            _mockContentLoader
                 .Setup(x => x.GetRequestUri(It.IsAny<string>()))
                 .Throws(new HttpRequestException());
 
@@ -81,7 +81,7 @@ namespace Crawler.Service.Tests.Services
         {
             //arrange
             var inputUrl = "https://google.com";
-            var expectedUri = _mockContentLoader
+            _mockContentLoader
                 .Setup(cl => cl.GetRequestUri(It.IsAny<string>()))
                 .ReturnsAsync(new Uri("https://www.google.com"));
 
@@ -101,7 +101,7 @@ namespace Crawler.Service.Tests.Services
         {
             //arrange
             var inputUrl = "https://www.google.com";
-            var expectedUri = _mockContentLoader
+            _mockContentLoader
                 .Setup(cl => cl.GetRequestUri(It.IsAny<string>()))
                 .ReturnsAsync(new Uri("https://www.google.com"));
 
