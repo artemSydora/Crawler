@@ -1,8 +1,8 @@
-﻿using Crawler.Service.Services;
+﻿using System.Threading.Tasks;
+using Crawler.Service.Services;
 using Crawler.Web.Models;
+using Crawler.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
 namespace Crawler.Web.Controllers
 {
@@ -10,11 +10,13 @@ namespace Crawler.Web.Controllers
     {
         private readonly TestsService _testService;
         private readonly InputValidationService _userInputService;
+        private readonly Mapper _mapper;
 
-        public TestController(TestsService testService, InputValidationService userInputService)
+        public TestController(TestsService testService, InputValidationService userInputService, Mapper mapper)
         {
             _testService = testService;
             _userInputService = userInputService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace Crawler.Web.Controllers
         {
             var page = await _testService.GetPageAsync(pageNumber, pageSize);
 
-            return View("Tests", page);
+            return View("Tests", _mapper.MapPageViewModel(page));
         }
 
         [HttpPost]
@@ -32,7 +34,7 @@ namespace Crawler.Web.Controllers
 
             if (isValidUrl)
             {
-                await _testService.SaveTestResultsAsync(input.Url);
+                await _testService.SaveTestAsync(input.Url);
             }
             else
             {
@@ -41,7 +43,7 @@ namespace Crawler.Web.Controllers
 
             var page = await _testService.GetPageAsync(1, 10);
 
-            return View("Tests", page);
+            return View("Tests", _mapper.MapPageViewModel(page));
         }
     }
 }
