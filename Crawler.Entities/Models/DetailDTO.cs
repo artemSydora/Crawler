@@ -2,7 +2,7 @@
 
 namespace Crawler.Entities.Models
 {
-    public class TestDetail
+    public class DetailDTO
     {
         public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace Crawler.Entities.Models
 
         public override bool Equals(object obj)
         {
-            return obj is TestDetail detail &&
+            return obj is DetailDTO detail &&
                    Id == detail.Id &&
                    Url == detail.Url &&
                    InSitemap == detail.InSitemap &&

@@ -9,9 +9,9 @@ namespace Crawler.Service.Models
 
         public int TotalPages { get; set; }
 
-        public IEnumerable<TestResult> Tests { get; set; }
+        public IEnumerable<TestDTO> Tests { get; set; }
 
-        public PageModel(int currentPage, int totalPages, IList<TestResult> result)
+        public PageModel(int currentPage, int totalPages, IList<TestDTO> result)
         {
             CurrentPage = currentPage;
             TotalPages = totalPages;

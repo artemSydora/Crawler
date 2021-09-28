@@ -41,7 +41,7 @@ namespace Crawler.ConsoleApp
                     }
                     else
                     {
-                        await _testsService.SaveTestResultsAsync(input);
+                        await _testsService.SaveTestAsync(input);
 
 
 
@@ -49,7 +49,7 @@ namespace Crawler.ConsoleApp
                                 .GetAllTests()
                                 .Max(t => t.Id);
 
-                        IEnumerable<TestDetail> details = _testsService.GetDetailsByTestId(latestTestId);
+                        IEnumerable<DetailDTO> details = _testsService.GetDetailsByTestId(latestTestId);
 
                         IEnumerable<string> urlsFromSitemap = details
                             .Where(td => !td.InWebsite)

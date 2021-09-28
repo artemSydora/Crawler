@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Crawler.Entities.Models
 {
-    public class TestResult
+    public class TestDTO
     {
-        public TestResult()
+        public TestDTO()
         {
-            TestDetails = new List<TestDetail>();
+            Details = new List<DetailDTO>();
         }
 
         public int Id { get; set; }
@@ -16,27 +16,27 @@ namespace Crawler.Entities.Models
 
         public DateTime DateTime { get; set; }
 
-        public ICollection<TestDetail> TestDetails { get; set; }
+        public ICollection<DetailDTO> Details { get; set; }
 
-        public TestResult(string startPageUrl, DateTime dateTime, ICollection<TestDetail> testDetails)
+        public TestDTO(string startPageUrl, DateTime dateTime, ICollection<DetailDTO> details)
         {
             StartPageUrl = startPageUrl;
             DateTime = dateTime;
-            TestDetails = testDetails;
+            Details = details;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is TestResult result &&
+            return obj is TestDTO result &&
                    Id == result.Id &&
                    StartPageUrl == result.StartPageUrl &&
                    DateTime == result.DateTime &&
-                   EqualityComparer<ICollection<TestDetail>>.Default.Equals(TestDetails, result.TestDetails);
+                   EqualityComparer<ICollection<DetailDTO>>.Default.Equals(Details, result.Details);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, StartPageUrl, DateTime, TestDetails);
+            return HashCode.Combine(Id, StartPageUrl, DateTime, Details);
         }
     }
 }

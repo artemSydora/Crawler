@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Crawler.Repository.EntityConfigurations
 {
-    public class TestDetailConfiguration : IEntityTypeConfiguration<TestDetail>
+    public class TestDTOConfiguration : IEntityTypeConfiguration<TestDTO>
     {
-        public void Configure(EntityTypeBuilder<TestDetail> builder)
+        public void Configure(EntityTypeBuilder<TestDTO> builder)
         {
-            builder.Property(ml => ml.Url)
-                   .HasMaxLength(2048)
+            builder.Property(t => t.StartPageUrl)
+                   .HasMaxLength(100)
                    .IsRequired();
         }
     }

@@ -15,7 +15,7 @@ namespace Crawler.Service.Tests.Services
 {
     public class TestServiceTests
     {
-        private readonly Mock<IRepository<TestResult>> _mockRepository;
+        private readonly Mock<IRepository<TestDTO>> _mockRepository;
         private readonly TestsService _testService;
         private readonly Mock<LinkCollector> _mockLinkCollector;
         private readonly Mock<PingCollector> _mockPingCollector;
@@ -24,7 +24,7 @@ namespace Crawler.Service.Tests.Services
         {
             _mockLinkCollector = new Mock<LinkCollector>(null, null);
             _mockPingCollector = new Mock<PingCollector>(null);
-            _mockRepository = new Mock<IRepository<TestResult>>();
+            _mockRepository = new Mock<IRepository<TestDTO>>();
             _testService = new TestsService(_mockRepository.Object, _mockLinkCollector.Object, _mockPingCollector.Object);
 
         }
@@ -33,11 +33,11 @@ namespace Crawler.Service.Tests.Services
         public void GetAllTestsOrderedById_ShouldReturnTestsCollectionOrderedById()
         {
             //arrange
-            IQueryable<TestResult> fakeTests = new List<TestResult>
+            IQueryable<TestDTO> fakeTests = new List<TestDTO>
             {
-                new TestResult { Id = 1 },
-                new TestResult { Id = 2 },
-                new TestResult { Id = 3 }
+                new TestDTO { Id = 1 },
+                new TestDTO { Id = 2 },
+                new TestDTO { Id = 3 }
             }
             .AsQueryable();
 
@@ -53,22 +53,22 @@ namespace Crawler.Service.Tests.Services
         }
 
         [Fact(Timeout = 1000)]
-        public async Task SaveTestResultsAsync_ShouldSaveResultsToDatabase()
+        public async Task SaveTestAsync_ShouldSaveResultsToDatabase()
         {
             //arrange
             var fakeHomePageUrl = "http://www.example.com";
 
             _mockRepository
-                .Setup(r => r.AddAsync(It.IsAny<TestResult>(), default));
+                .Setup(r => r.AddAsync(It.IsAny<TestDTO>(), default));
             _mockRepository
                .Setup(r => r.SaveChangesAsync(default));
 
             //act
-            await _testService.SaveTestResultsAsync(fakeHomePageUrl);
+            await _testService.SaveTestAsync(fakeHomePageUrl);
 
             //assert
             _mockRepository
-                .Verify(r => r.AddAsync(It.IsAny<TestResult>(), default), Times.Once);
+                .Verify(r => r.AddAsync(It.IsAny<TestDTO>(), default), Times.Once);
 
             _mockRepository
                 .Verify(r => r.SaveChangesAsync(default), Times.Once);
@@ -78,60 +78,60 @@ namespace Crawler.Service.Tests.Services
         public void GetDetailsByTestId_InputExistingId_ReturnDetailsCollection()
         {
             //arrange
-            IQueryable<TestResult> testResult = new List<TestResult>
+            IQueryable<TestDTO> testResult = new List<TestDTO>
             { 
-                new TestResult
+                new TestDTO
                 {
                     Id = 1,
-                    TestDetails = new List<TestDetail>
+                    Details = new List<DetailDTO>
                     {
-                    new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
-                    new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
-                    new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
+                    new DetailDTO { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
+                    new DetailDTO { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
+                    new DetailDTO { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
                     }
                 } 
             }
             .AsQueryable();
 
             _mockRepository
-                .Setup(r => r.Include(tr => tr.TestDetails))
+                .Setup(r => r.Include(tr => tr.Details))
                 .Returns(testResult);
 
             //act
-            IEnumerable<TestDetail> actual = _testService.GetDetailsByTestId(1);
+            IEnumerable<DetailDTO> actual = _testService.GetDetailsByTestId(1);
 
             //assert
             Assert.Collection(actual,
-                result => Assert.Equal(new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true }, result),
-                result => Assert.Equal(new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true }, result),
-                result => Assert.Equal(new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }, result));
+                result => Assert.Equal(new DetailDTO { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true }, result),
+                result => Assert.Equal(new DetailDTO { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true }, result),
+                result => Assert.Equal(new DetailDTO { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }, result));
         }
 
         [Fact(Timeout = 1000)]
         public void GetDetailsByTestId_InputNotExistingId_ReturnEmptyCollection()
         {
             //arrange
-            IQueryable<TestResult> testResult = new List<TestResult>
+            IQueryable<TestDTO> testResult = new List<TestDTO>
             {
-                new TestResult
+                new TestDTO
                 {
                     Id = 1,
-                    TestDetails = new List<TestDetail>
+                    Details = new List<DetailDTO>
                     {
-                    new TestDetail { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
-                    new TestDetail { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
-                    new TestDetail { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
+                    new DetailDTO { Url = "1", ResponseTimeMs = 100, InSitemap = true, InWebsite = true },
+                    new DetailDTO { Url = "2", ResponseTimeMs = 200, InSitemap = false, InWebsite = true },
+                    new DetailDTO { Url = "3", ResponseTimeMs = 300, InSitemap = true, InWebsite = false }
                     }
                 }
             }
             .AsQueryable();
 
             _mockRepository
-                .Setup(r => r.Include(tr => tr.TestDetails))
+                .Setup(r => r.Include(tr => tr.Details))
                 .Returns(testResult);
 
             //act
-            IEnumerable<TestDetail> actual = _testService.GetDetailsByTestId(2);
+            IEnumerable<DetailDTO> actual = _testService.GetDetailsByTestId(2);
 
             //assert
             Assert.Empty(actual);
