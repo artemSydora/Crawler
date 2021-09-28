@@ -49,6 +49,7 @@ namespace Crawler.Service.Services
                
                 var comparisonResult = Uri.Compare(startPageUri, inputUri, UriComponents.SchemeAndServer,
                 UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
+                
                 if (comparisonResult != 0)
                 {
                     ErrorMessage = "Wrong scheme or host name";
