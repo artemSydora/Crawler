@@ -1,5 +1,7 @@
-﻿@model PageModel;
-
+﻿@model PageViewModel;
+@{
+    var count = 0;
+}
 <div class="text-center">
     @if (Model.Tests.Count() > 0)
     {
@@ -19,13 +21,13 @@
                 {
                     <tbody>
                         <tr>
-                            <th scope="row">@test.Id</th>
+                            <th scope="row">@(++count)</th>
                             <td class="text-left w-50">@test.StartPageUrl</td>
                             <td>@test.DateTime</td>
                             <td>
                                 <a asp-controller="Detail"
                                    asp-action="Details"
-                                   asp-route-id="@test.Id">
+                                   asp-route-id="@count">
                                     See details
                                 </a>
                             </td>
