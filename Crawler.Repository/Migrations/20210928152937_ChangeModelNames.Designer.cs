@@ -4,14 +4,16 @@ using Crawler.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Crawler.Repository.Migrations
 {
     [DbContext(typeof(CrawlerDbContext))]
-    partial class CrawlerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210928152937_ChangeModelNames")]
+    partial class ChangeModelNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,7 @@ namespace Crawler.Repository.Migrations
 
                     b.HasIndex("TestDTOId");
 
-                    b.ToTable("Details");
+                    b.ToTable("LinkPerformanceResults");
                 });
 
             modelBuilder.Entity("Crawler.Entities.Models.TestDTO", b =>
