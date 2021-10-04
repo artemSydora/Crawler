@@ -11,30 +11,29 @@ namespace Crawler.Service.Services
 {
     public class TestsService
     {
-        private readonly IRepository<TestDTO> _testResultsRepository;
+        private readonly IRepository<TestDTO> _testsRepository;
         private readonly LinkCollector _linkCollector;
         private readonly PingCollector _pingCollector;
 
-        public TestsService(IRepository<TestDTO> testsResultsRepository, LinkCollector linkCollector, PingCollector pingCollector)
+        public TestsService(IRepository<TestDTO> testsRepository, LinkCollector linkCollector, PingCollector pingCollector)
         {
-            _testResultsRepository = testsResultsRepository;
+            _testsRepository = testsRepository;
             _linkCollector = linkCollector;
             _pingCollector = pingCollector;
         }
 
         public IEnumerable<TestDTO> GetAllTests()
         {
-            var tests = _testResultsRepository
-                .GetAll();
+            var tests = _testsRepository.GetAll();
 
             return tests;
         }
 
         public async Task<PageModel> GetPageAsync(int pageNumber, int pageSize)
         {
-            var tests = _testResultsRepository.Include(t => t.Details);
+            var tests = _testsRepository.GetAll();
 
-            var page = await _testResultsRepository
+            var page = await _testsRepository
                 .GetPageAsync(tests, pageNumber, pageSize);
 
             var totalPages = (int)Math.Ceiling(page.TotalCount / (double)pageSize);
@@ -57,14 +56,14 @@ namespace Crawler.Service.Services
                 })
                 .ToList();
 
-            await _testResultsRepository.AddAsync(new TestDTO(startPageUrl, DateTime.Now, details));
+            await _testsRepository.AddAsync(new TestDTO(startPageUrl, DateTime.Now, details));
 
-            await _testResultsRepository.SaveChangesAsync();
+            await _testsRepository.SaveChangesAsync();
         }
 
         public IEnumerable<DetailDTO> GetDetailsByTestId(int id)
         {
-            var testResult = _testResultsRepository
+            var testResult = _testsRepository
                 .Include(t => t.Details)
                 .FirstOrDefault(t => t.Id == id);
 
