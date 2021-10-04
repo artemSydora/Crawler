@@ -8,7 +8,7 @@ namespace Crawler.Web.Services
 {
     public class Mapper
     {
-        public IEnumerable<DetailViewModel> MapDetailModels(IEnumerable<DetailDTO> details)
+        public IEnumerable<DetailViewModel> MapDetailViewModels(IEnumerable<DetailDTO> details)
         {
             return details
                 .Select(detail => new DetailViewModel
@@ -20,7 +20,7 @@ namespace Crawler.Web.Services
                 });
         }
 
-        public IEnumerable<TestViewModel> MapTestViewModel(IEnumerable<TestDTO> tests)
+        public IEnumerable<TestViewModel> MapTestViewModels(IEnumerable<TestDTO> tests)
         {
             return tests
                 .Select(test => new TestViewModel
@@ -35,7 +35,7 @@ namespace Crawler.Web.Services
             return new PageViewModel
             {
                 CurrentPage = page.CurrentPage,
-                Tests = MapTestViewModel(page.Tests).ToList(),
+                Tests = MapTestViewModels(page.Tests).ToList(),
                 TotalPages = page.TotalPages
             };
         }
