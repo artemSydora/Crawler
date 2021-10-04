@@ -25,6 +25,7 @@ namespace Crawler.Api.Services
             return tests
                 .Select(test => new TestViewModel
                 {
+                    Id = test.Id,
                     DateTime = test.DateTime,
                     StartPageUrl = test.StartPageUrl
                 });
