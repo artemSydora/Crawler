@@ -19,7 +19,7 @@ namespace Crawler.Web.Controllers
         {
             var details = _testService.GetDetailsByTestId(id);
 
-            return View(_mapper.MapDetailModels(details));
+            return View(_mapper.MapDetailViewModels(details));
         }
     }
 }
