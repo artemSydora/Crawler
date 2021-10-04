@@ -1,7 +1,7 @@
 using Crawler.Logic.Extensions;
 using Crawler.Repository.Extensions;
 using Crawler.Service.Extensions;
-using Crawler.Web.Extensions;
+using Crawler.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +21,11 @@ namespace Crawler.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWeb();
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
+            services.AddScoped<Mapper>();
+
             services.AddLogic();
             services.AddServices();
             services.AddRepository(Configuration);
