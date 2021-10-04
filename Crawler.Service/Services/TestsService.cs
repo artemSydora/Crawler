@@ -24,8 +24,7 @@ namespace Crawler.Service.Services
 
         public IEnumerable<TestDTO> GetAllTests()
         {
-            var tests = _testsRepository
-                .GetAll();
+            var tests = _testsRepository.GetAll();
 
             return tests;
         }
