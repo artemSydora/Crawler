@@ -20,6 +20,11 @@ namespace Crawler.Api.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns details by test id
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<IEquatable<DetailViewModel>> GetTestDetails(int testId)
         {
