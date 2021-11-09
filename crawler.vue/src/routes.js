@@ -5,14 +5,16 @@ import Details from "./pages/Details.vue";
 export default new VueRouter({
     routes: [
         {
-            path: '',
+            path: '/',
             name: 'Tests',
-            component: Tests
+            component: Tests,
+            props: true
         },
         {
-            path: '/details',
+            path: '/:testId/details',
             name: 'Details',
-            component: Details
+            component: Details,
+            props: true
         }
     ],
     mode: 'history'

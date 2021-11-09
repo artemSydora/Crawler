@@ -1,9 +1,17 @@
 <template>
   <div class="container">
     <h3 class="heading">Tests</h3>
-    <b-table striped bordered hover :items="testsPage.tests" :fields="fields">
-      <template #cell(index)="data">
-        {{ data.index + 1 }}
+    <b-table 
+    id="tests" 
+    striped 
+    bordered
+     hover
+    :items="tests" 
+    :fields="fields" 
+    :per-page="pageSize" 
+    >
+      <template #cell(id)="data">
+        {{ data.item.id }}
       </template>
       <template #cell(startPageUrl)="data">
           <span class="left">{{ data.item.startPageUrl }}</span>
@@ -12,21 +20,23 @@
          <span class="left">{{ data.item.dateTime | moment("DD.MM.YYYY, hh:mm:ss") }}</span>      
       </template>
       <template #cell(details)="data" >
-        <router-link :to="'/test/' + data.item.id">
+        <router-link :to="data.item.id + '/details'">
             <a>see details</a>
         </router-link>
       </template>
     </b-table>
-    <!-- <b-pagination
+    <b-pagination
+      aria-controls="tests"
       align="center"
+      @change="getTestsPage($event)"
       v-model="currentPage"
-      :total-rows="rows"
-      :per-page="perPage"
+      :total-rows="totalRows"
+      :per-page="pageSize"
       first-text="First"
       prev-text="Prev"
       next-text="Next"
       last-text="Last"
-    ></b-pagination> -->
+    ></b-pagination>
   </div>
 </template>
 
@@ -37,41 +47,33 @@ export default {
   name: "Tests",
   data() {
     return {
-      testsPage: {
-        currentPage: 1,
-        totalPages: 1,
-        tests: [],
-      },
-      pageSize: 10,
+      tests: [],  
+      currentPage: 1,
+      totalPages: 1,
+      pageSize: 15,
       userInput: "",
       fields: [
-        {
-          key: "index",
-          label: "#",
-        },
-        {
-          key: "startPageUrl",
-          label: "Url",
-        },
-        {
-          key: "dateTime",
-          label: "Date"
-        },
-        {
-          key: "details",
-          label: ""
-        },
+        { key: "id", label: "#" },
+        { key: "startPageUrl", label: "Url" },
+        { key: "dateTime", label: "Date" },
+        { key: "details", label: "" },
       ],
     };
   },
+  props:['baseUri'],
+  computed:
+  {
+    totalRows() {
+      return this.totalPages * this.pageSize;
+      }
+  },
   methods: {
-    getTestsPage(pageNumber) {
+    getTestsPage(currentPage) {
       axios
-        .get(
-          `http://localhost:21758/api/tests?pageNumber=${pageNumber}&pageSize=${this.pageSize}`
-        )
-        .then((response) => {
-          this.testsPage = response.data;
+        .get(this.baseUri + `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`)
+        .then((response) => {       
+          this.tests = response.data.tests;
+          this.totalPages = response.data.totalPages;
         })
         .catch((error) => {
           if (error.response) {
@@ -82,7 +84,7 @@ export default {
     }
   },
   created() {
-    this.getTestsPage(this.testsPage.currentPage);
+    this.getTestsPage(this.currentPage);
   },
 };
 </script>
