@@ -51,13 +51,12 @@ namespace Crawler.Api.Controllers
             if (isValidUrl)
             {
                 await _testService.SaveTestAsync(userInput.Url);
-                var page = await _testService.GetPageAsync(1, 10);
 
-                return Ok(_mapper.MapPageViewModel(page));
+                return Ok(ModelState);
             }
             else
             {
-                ModelState.AddModelError("Url", _inputValidationService.ErrorMessage);
+                ModelState.AddModelError("Error", _inputValidationService.ErrorMessage);
 
                 return BadRequest(ModelState);
             }

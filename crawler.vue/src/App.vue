@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header msg="sdsds" isValid="true"/>
-    <router-view :baseUri = "baseUri"></router-view>
+    <Header :baseUri="baseUri"/>
+    <router-view :baseUri="baseUri"></router-view>
     <Footer />
   </div>
 </template>
@@ -16,17 +16,18 @@ export default {
     Header,
     Footer,
   },
-  data(){
+  data() {
     return {
-      baseUri: 'http://crawler.api.loc/api'
-      } 
+      baseUri: "http://crawler.api.loc/api",
+    };
   },
 };
 </script>
 
 <style lang="scss">
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -36,5 +37,4 @@ export default {
 html {
   overflow-y: scroll;
 }
-
 </style>
