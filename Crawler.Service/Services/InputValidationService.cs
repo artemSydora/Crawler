@@ -1,5 +1,6 @@
 ﻿using Crawler.Logic;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -36,6 +37,13 @@ namespace Crawler.Service.Services
                 return false;
             }
 
+            if (result.Scheme != Uri.UriSchemeHttp && result.Scheme != Uri.UriSchemeHttps)
+            {
+                ErrorMessage = "Wrong scheme";
+
+                return false;
+            }
+
             return await TryCompareUrls($"https://{result.DnsSafeHost}");          
         }
 
@@ -52,7 +60,7 @@ namespace Crawler.Service.Services
                 
                 if (comparisonResult != 0)
                 {
-                    ErrorMessage = "Wrong scheme or host name";
+                    ErrorMessage = "Wrong host name";
 
                     return false;
                 }

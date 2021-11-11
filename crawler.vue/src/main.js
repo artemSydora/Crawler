@@ -15,6 +15,8 @@ Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
+export const eventEmitter = new Vue()
+
 new Vue({
   render: h => h(App),
   router

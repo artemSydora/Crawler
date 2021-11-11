@@ -1,34 +1,53 @@
 <template>
   <header id="header">
     <div class="container px-0">
-      <b-navbar class="bb" toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="#">Crawler</b-navbar-brand>
+      <b-navbar
+        class="header-border"
+        toggleable="lg"
+        type="dark"
+        variant="info"
+      >
+        <b-navbar-brand><a @click="onBack">Crawler</a></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
+        <div v-if="isTesting">
+          <b-spinner label="Spinning"></b-spinner>
+        </div>
         <b-collapse id="nav-collapse" is-nav>
-          <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <b-nav-form @submit.prevent="onTest">
+              <div v-if="status !== null">
+                <b-form-invalid-feedback
+                  class="validation"
+                  :state="validation"
+                  tooltip
+                >
+                  {{ errorMsg }}
+                </b-form-invalid-feedback>
+                <b-form-valid-feedback
+                  class="validation"
+                  :state="validation"
+                  tooltip
+                >
+                  Test successfully complete
+                </b-form-valid-feedback>
+              </div>
+
+              <b-form-input
+                size="md"
+                class="mx-sm-3"
+                placeholder="Url"
+                :state="validation"
+                v-model.lazy="url"
+                @change="onChange"
+              ></b-form-input>
               <b-button
+                variant="warning"
                 size="md"
                 class="my-2 my-sm-0"
                 type="submit"
                 >Test</b-button
               >
-              <b-form-input
-                size=""
-                class="mr-sm-2"
-                placeholder="Url"
-                :state="validation"
-                v-model="userInput.url"
-              ></b-form-input>
-              <b-form-invalid-feedback :state="validation">
-                {{ errorMsg }}
-              </b-form-invalid-feedback>
-              <b-form-valid-feedback :state="validation">
-                Test successfully complete
-              </b-form-valid-feedback>
             </b-nav-form>
           </b-navbar-nav>
         </b-collapse>
@@ -41,28 +60,67 @@ import axios from "axios";
 
 export default {
   name: "Header",
-  props:['baseUri'],
+  props: {
+    baseUri: {
+      type: String,
+      default() {
+        return null;
+      },
+    },
+  },
   data() {
     return {
-      userInput: { url: "" },
-      errorMsg: " "
+      url: "",
+      errorMsg: null,
+      status: null,
+      isTesting: false,
     };
   },
   computed: {
     validation() {
-      return this.errorMsg !== null ? true : false;
+      return this.status === null ? null : this.status < 400 ? true : false;
+    },
+    input() {
+      return { userInput: { Url: this.url } };
     },
   },
   methods: {
-    onTest(){
+    onChange() {
+      this.status = null;
+    },
+    onTest() {
+      this.isTesting = true;
       this.saveResults();
-      this.$root.$emit('loadPage');
+      this.$root.$emit("loadLastTest");
     },
+    onBack() {
+      this.$router.back();
+    },
+
     saveResults() {
-      axios.post(this.baseUri + "/tests", this.userInput).catch((error) => {
-        this.errorMsg = error.response.data.Error;
-      });
+      axios
+        .post(this.baseUri + "/tests", { Url: this.url })
+        .then((response) => {
+          this.status = response.status;
+          this.errorMsg = null;
+          this.isTesting = false;
+        })
+        .catch((error) => {
+          if (error.response) {
+            this.status = error.response.status;
+            this.errorMsg = error.response.data.Error[0];
+            this.isTesting = false;
+          }
+        });
     },
+  },
+  watch: {
+    url() {
+      this.onChange();
+    },
+    onTest() {
+      this.isTesting = false;
+    }
   },
 };
 </script>
@@ -83,7 +141,12 @@ a.navbar-brand {
   z-index: 4;
 }
 
-.bb {
+.validation {
+  position: relative !important;
+  left: 0 !important;
+}
+
+.header-border {
   border-bottom: 10px solid #eac962;
 }
 </style>

@@ -59,9 +59,7 @@ namespace Crawler.Api.Controllers
                 ModelState.AddModelError("Error", _inputValidationService.ErrorMessage);
 
                 return BadRequest(ModelState);
-            }
-
-            
+            }   
         }
     }
 }

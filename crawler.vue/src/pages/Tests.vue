@@ -83,9 +83,12 @@ export default {
   },
   created() {
     this.getTestsPage(this.currentPage);
+    this.$root.$on('loadLastTest', () => this.tests = []);
   },
-  mounted(){
-    this.$root.$on('loadPage', () => this.getTestsPage(this.currentPage))
+  watch: {
+    tests() {
+      this.getTestsPage(this.currentPage);
+    }
   }
 };
 </script>
@@ -121,6 +124,7 @@ export default {
   box-shadow: none;
 }
 .table-margin {
+  margin-top: 70px;
   margin-bottom: 130px;
 }
 </style>

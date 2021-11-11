@@ -1,40 +1,37 @@
 <template>
   <div class="container overflow accordion-margin px-0">
-    <div class="label row mb-4">
-      <div class="col">
-        <p>
-          Urls(html documents) found after crawling a website:
-          {{ getWebsiteCount() }}
-        </p>
-      </div>
-      <div class="col">
-        <p>Urls found in sitemap: {{ getSitemapCount() }}</p>
-      </div>
+    <div class="d-flex flex-row align-items-center justify-content-around">
+      <p class="bg-warning text-white p-3">
+        Urls(html documents) found after crawling a website:
+        <strong>{{ getWebsiteCount() }}</strong>
+      </p>
+
+      <p class="bg-warning text-white p-3 w-">
+        Urls found in sitemap: <strong>{{ getSitemapCount() }}</strong>
+      </p>
     </div>
 
     <div class="accordion" role="tablist">
-
-      <accordionItem 
-        id="accordion-1" 
-        :details="onlySitemap" 
+      <accordionItem
+        id="accordion-1"
+        :details="onlySitemap"
         tableTitle="Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web"
         errorMsg="There are no urls"
       />
-      
-      <accordionItem 
-      id="accordion-2" 
-      :details="onlyWebsite" 
-      tableTitle="Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml"
-      errorMsg="There are no urls"
+
+      <accordionItem
+        id="accordion-2"
+        :details="onlyWebsite"
+        tableTitle="Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml"
+        errorMsg="There are no urls"
       />
 
-      <accordionItem 
-      id="accordion-3" 
-      :details="details" 
-      tableTitle="All urls FOUNDED BY CRAWLING THE WEBSITE AND SITEMAP.XML"
-      errorMsg="There are no urls"
+      <accordionItem
+        id="accordion-3"
+        :details="details"
+        tableTitle="All urls FOUNDED BY CRAWLING THE WEBSITE AND SITEMAP.XML"
+        errorMsg="There are no urls"
       />
-    
     </div>
   </div>
 </template>
@@ -66,7 +63,7 @@ export default {
     },
     getSitemapCount() {
       return this.details.filter((x) => x.inSitemap === true).length;
-    }   
+    },
   },
   created() {
     axios
@@ -74,7 +71,7 @@ export default {
       .then((response) => {
         return (this.details = response.data);
       });
-  }
+  },
 };
 </script>
 
@@ -84,6 +81,7 @@ export default {
   float: left;
 }
 .accordion-margin {
+  margin-top: 100px;
   margin-bottom: 80px;
 }
 </style>

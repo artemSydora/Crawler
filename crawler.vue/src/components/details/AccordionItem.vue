@@ -3,11 +3,9 @@
         <b-card-header header-tag="header" class="p-0" role="tab">
           <div class="bg-info w-100 text-white p-3"
             block
-            v-b-toggle="id"
-          
+            v-b-toggle="id"        
             variant="info"
-            >{{tableTitle}}
-            site</div
+            >{{tableTitle}}</div
           >
         </b-card-header>
         <b-collapse
