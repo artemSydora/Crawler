@@ -53,7 +53,7 @@ namespace Crawler.Service.Tests.Services
         }
 
         [Fact(Timeout = 1000)]
-        public async Task SaveTestAsync_ShouldSaveResultsToDatabase()
+        public async Task RunTestAsync_ShouldRunTestAndSaveResultsToDatabase()
         {
             //arrange
             var fakeHomePageUrl = "http://www.example.com";
@@ -64,7 +64,7 @@ namespace Crawler.Service.Tests.Services
                .Setup(r => r.SaveChangesAsync(default));
 
             //act
-            await _testService.SaveTestAsync(fakeHomePageUrl);
+            await _testService.RunTestAsync(fakeHomePageUrl);
 
             //assert
             _mockRepository

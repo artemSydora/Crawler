@@ -77,6 +77,26 @@ namespace Crawler.Service.Tests.Services
         }
 
         [Fact(Timeout = 1000)]
+        public async Task VerifyUrl_InputUrlShceneDoesNotMatchWithHttpOrHttps_SetErrorMessageAndReturnFalse()
+        {
+            //arrange
+            var inputUrl = "httpss://google.com";
+            _mockContentLoader
+                .Setup(cl => cl.GetRequestUri(It.IsAny<string>()))
+                .ReturnsAsync(new Uri(inputUrl));
+
+            //actual
+            var actualVerifyStatus = await _inputValidationService.VerifyUrl(inputUrl);
+            var actualErrorMessage = _inputValidationService.ErrorMessage;
+
+            //assert
+            _mockContentLoader.Verify(cl => cl.GetRequestUri(It.IsAny<string>()), Times.Never);
+
+            Assert.False(actualVerifyStatus);
+            Assert.Equal("Wrong scheme", actualErrorMessage);
+        }
+
+        [Fact(Timeout = 1000)]
         public async Task VerifyUrl_InputUrlDoesNotMatchWithRequestUri_SetErrorMessageAndReturnFalse()
         {
             //arrange
@@ -93,7 +113,7 @@ namespace Crawler.Service.Tests.Services
             _mockContentLoader.Verify(cl => cl.GetRequestUri(It.IsAny<string>()), Times.Once);
 
             Assert.False(actualVerifyStatus);
-            Assert.Equal("Wrong scheme or host name", actualErrorMessage);
+            Assert.Equal("Wrong host name", actualErrorMessage);
         }
 
         [Fact(Timeout = 1000)]

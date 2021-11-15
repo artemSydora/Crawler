@@ -41,7 +41,7 @@ namespace Crawler.Service.Services
             return (new PageModel(pageNumber, totalPages, page.Result));
         }
 
-        public async Task SaveTestAsync(string startPageUrl)
+        public async Task RunTestAsync(string startPageUrl)
         {
             var links = await _linkCollector.CollectAllLinksAsync(startPageUrl);
             var pings = await _pingCollector.MeasureLinksPerformanceAsync(links);

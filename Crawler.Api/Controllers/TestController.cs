@@ -34,7 +34,7 @@ namespace Crawler.Api.Controllers
         {
             var page = await _testService.GetPageAsync(pageNumber, pageSize);
 
-            if (page == null || page.Tests.Count() == 0)
+            if (page == null || !page.Tests.Any())
             {
                 return NotFound();
             }
@@ -42,15 +42,19 @@ namespace Crawler.Api.Controllers
             return Ok(_mapper.MapPageViewModel(page));
         }
 
-
+        /// <summary>
+        /// Try save test results
+        /// </summary>
+        /// <param name="userInput"></param>
+        /// <returns>If user input is valid returns true, else returns false and add to model state error message</returns>
         [HttpPost]
-        public async Task<IActionResult> SaveResults(Input userInput)
+        public async Task<IActionResult> RunTest(Input userInput)
         {
             var isValidUrl = await _inputValidationService.VerifyUrl(userInput.Url);
 
             if (isValidUrl)
             {
-                await _testService.SaveTestAsync(userInput.Url);
+                await _testService.RunTestAsync(userInput.Url);
 
                 return Ok(ModelState);
             }

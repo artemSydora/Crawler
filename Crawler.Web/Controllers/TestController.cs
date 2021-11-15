@@ -34,7 +34,7 @@ namespace Crawler.Web.Controllers
 
             if (isValidUrl)
             {
-                await _testService.SaveTestAsync(input.Url);
+                await _testService.RunTestAsync(input.Url);
             }
             else
             {
