@@ -1,6 +1,6 @@
 <template>
    <footer id="footer">
-        <div class="container bg-info py-3 bt">
+        <div class="container bg-info py-3 footer-border">
             UKAD &copy; - Crawler - Artem Sydora 2021
         </div>
     </footer>
@@ -21,7 +21,7 @@ export default {
       z-index: 4;
    }
 
-   .bt {
+   .footer-border {
      border-top: 10px solid #EAC962;
    }
 </style>

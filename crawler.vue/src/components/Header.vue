@@ -18,14 +18,14 @@
             <b-nav-form @submit.prevent="onTest">
               <div v-if="status !== null">
                 <b-form-invalid-feedback
-                  class="validation"
+                  class="validation-tooltip-position"
                   :state="validation"
                   tooltip
                 >
                   {{ errorMsg }}
                 </b-form-invalid-feedback>
                 <b-form-valid-feedback
-                  class="validation"
+                  class="validation-tooltip-position"
                   :state="validation"
                   tooltip
                 >
@@ -37,7 +37,6 @@
                 size="md"
                 class="mx-sm-3"
                 placeholder="Url"
-                :state="validation"
                 v-model.lazy="url"
                 @change="onChange"
               ></b-form-input>
@@ -90,14 +89,14 @@ export default {
     },
     onTest() {
       this.isTesting = true;
-      this.saveResults();
-      this.$root.$emit("loadLastTest");
+      this.runTest();
+      this.$root.$emit("loadLastTest", this.isTesting);
     },
     onBack() {
       this.$router.back();
     },
 
-    saveResults() {
+    runTest() {
       axios
         .post(this.baseUri + "/tests", { Url: this.url })
         .then((response) => {
@@ -141,7 +140,7 @@ a.navbar-brand {
   z-index: 4;
 }
 
-.validation {
+.validation-tooltip-position {
   position: relative !important;
   left: 0 !important;
 }

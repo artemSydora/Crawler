@@ -1,47 +1,54 @@
 <template>
   <div class="container px-0 table-margin">
-    <h3 class="display-4 text-info">Tests</h3>
-    <b-table
-      id="tests"
-      bordered
-      dark
-      hover
-      table-variant="info"
-      head-row-variant="warning"
-      :items="tests"
-      :fields="fields"
-      :per-page="pageSize"
-    >
-      <template #cell(id)="data">
-        {{ data.item.id }}
-      </template>
-      <template #cell(startPageUrl)="data">
-        <span class="left">{{ data.item.startPageUrl }}</span>
-      </template>
-      <template #cell(dateTime)="data">
-        <span class="left">{{
-          data.item.dateTime | moment("DD.MM.YYYY, hh:mm:ss")
-        }}</span>
-      </template>
-      <template #cell(details)="data">
-        <router-link :to="data.item.id + '/details'">
-          <a class="text-warning text-decoration">see details</a>
-        </router-link>
-      </template>
-    </b-table>
-    <b-pagination
-      class="pagination"
-      aria-controls="tests"
-      align="center"
-      @change="getTestsPage($event)"
-      v-model="currentPage"
-      :total-rows="totalRows"
-      :per-page="pageSize"
-      first-text="First"
-      prev-text="Prev"
-      next-text="Next"
-      last-text="Last"
-    ></b-pagination>
+    <div v-if="tests.length > 0">
+      <h3 class="display-4 text-info">Tests</h3>
+      <b-table
+        id="tests"
+        bordered
+        dark
+        hover
+        table-variant="info"
+        head-row-variant="warning"
+        :items="tests"
+        :fields="fields"
+        :per-page="pageSize"
+      >
+        <template #cell(id)="data">
+          {{ data.item.id }}
+        </template>
+        <template #cell(startPageUrl)="data">
+          <span class="left">{{ data.item.startPageUrl }}</span>
+        </template>
+        <template #cell(dateTime)="data">
+          <span class="left">{{
+            data.item.dateTime | moment("DD.MM.YYYY, hh:mm:ss")
+          }}</span>
+        </template>
+        <template #cell(details)="data">
+          <router-link :to="data.item.id + '/details'">
+            <a class="text-warning text-decoration">see details</a>
+          </router-link>
+        </template>
+      </b-table>
+      <div v-if="totalPages > 1">
+        <b-pagination
+          class="pagination"
+          aria-controls="tests"
+          align="center"
+          @change="getTestsPage($event)"
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="pageSize"
+          first-text="First"
+          prev-text="Prev"
+          next-text="Next"
+          last-text="Last"
+        ></b-pagination>
+      </div>
+    </div>
+    <div v-else>
+      <h3 class="display-4 text-info">There are no tests yet</h3>
+    </div>
   </div>
 </template>
 
@@ -52,44 +59,73 @@ export default {
   name: "Tests",
   data() {
     return {
-      tests: [],  
+      tests: [],
       currentPage: 1,
       totalPages: 1,
       pageSize: 15,
+      needLoadLastTest: false,
       fields: [
-        { key: "id", label: "#", },
-        { key: "startPageUrl", label: "Url", },
-        { key: "dateTime", label: "Date" },
-        { key: "details", label: "" },
+        {
+          key: "id",
+          label: "#",
+          tdClass: "align-middle",
+          thClass: "align-middle",
+          class: "id-column-width",
+        },
+        {
+          key: "startPageUrl",
+          label: "Url",
+          tdClass: "align-middle",
+          thClass: "align-middle",
+          class: "url-column-width",
+        },
+        {
+          key: "dateTime",
+          label: "Date",
+          tdClass: "align-middle",
+          thClass: "align-middle",
+        },
+        {
+          key: "details",
+          label: "",
+          tdClass: "align-middle",
+          thClass: "align-middle",
+        },
       ],
     };
   },
-  props:['baseUri'],
-  computed:
-  {
+  props: ["baseUri"],
+  computed: {
     totalRows() {
       return this.totalPages * this.pageSize;
-      }
+    },
   },
   methods: {
     getTestsPage(currentPage) {
       axios
-        .get(this.baseUri + `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`)
-        .then((response) => {       
+        .get(
+          this.baseUri +
+            `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`
+        )
+        .then((response) => {
           this.tests = response.data.tests;
           this.totalPages = response.data.totalPages;
         });
-    }
+    },
   },
   created() {
     this.getTestsPage(this.currentPage);
-    this.$root.$on('loadLastTest', () => this.tests = []);
+    this.$root.$on("loadLastTest", (value) => {
+      if (value) {
+        this.getTestsPage(this.currentPage);
+      }
+    });
   },
   watch: {
     tests() {
       this.getTestsPage(this.currentPage);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -124,7 +160,14 @@ export default {
   box-shadow: none;
 }
 .table-margin {
-  margin-top: 70px;
-  margin-bottom: 130px;
+  margin-top: 65px;
+  margin-bottom: 125px;
+}
+
+.url-column-width {
+  width: 700px;
+}
+.id-column-width {
+  width: 80px;
 }
 </style>
