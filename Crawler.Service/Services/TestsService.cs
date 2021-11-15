@@ -43,7 +43,10 @@ namespace Crawler.Service.Services
 
         public async Task RunTestAsync(string startPageUrl)
         {
-            var links = await _linkCollector.CollectAllLinksAsync(startPageUrl);
+            var startPageUri = new Uri(startPageUrl);
+            var testingUrl = startPageUri.Scheme + "://" + startPageUri.Host;
+
+            var links = await _linkCollector.CollectAllLinksAsync(testingUrl);
             var pings = await _pingCollector.MeasureLinksPerformanceAsync(links);
 
             var details = links
@@ -56,7 +59,7 @@ namespace Crawler.Service.Services
                 })
                 .ToList();
 
-            await _testsRepository.AddAsync(new TestDTO(startPageUrl, DateTime.Now, details));
+            await _testsRepository.AddAsync(new TestDTO(testingUrl, DateTime.Now, details));
 
             await _testsRepository.SaveChangesAsync();
         }

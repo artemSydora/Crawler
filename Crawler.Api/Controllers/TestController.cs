@@ -51,7 +51,7 @@ namespace Crawler.Api.Controllers
         public async Task<IActionResult> RunTest(Input userInput)
         {
             var isValidUrl = await _inputValidationService.VerifyUrl(userInput.Url);
-
+            
             if (isValidUrl)
             {
                 await _testService.RunTestAsync(userInput.Url);
