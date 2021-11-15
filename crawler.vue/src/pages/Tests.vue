@@ -103,10 +103,7 @@ export default {
   methods: {
     getTestsPage(currentPage) {
       axios
-        .get(
-          this.baseUri +
-            `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`
-        )
+        .get(this.baseUri + `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`)
         .then((response) => {
           this.tests = response.data.tests;
           this.totalPages = response.data.totalPages;
@@ -115,16 +112,9 @@ export default {
   },
   created() {
     this.getTestsPage(this.currentPage);
-    this.$root.$on("loadLastTest", (value) => {
-      if (value) {
-        this.getTestsPage(this.currentPage);
-      }
-    });
-  },
-  watch: {
-    tests() {
+    this.$root.$on("loadLastTest", () => {
       this.getTestsPage(this.currentPage);
-    },
+    });
   },
 };
 </script>
@@ -159,11 +149,11 @@ export default {
   border-color: #17a2b8;
   box-shadow: none;
 }
+
 .table-margin {
   margin-top: 65px;
   margin-bottom: 125px;
 }
-
 .url-column-width {
   width: 700px;
 }

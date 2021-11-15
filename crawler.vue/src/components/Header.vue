@@ -10,7 +10,7 @@
         <b-navbar-brand><a @click="onBack">Crawler</a></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <div v-if="isTesting">
+        <div v-if="showSpinner">
           <b-spinner label="Spinning"></b-spinner>
         </div>
         <b-collapse id="nav-collapse" is-nav>
@@ -72,7 +72,7 @@ export default {
       url: "",
       errorMsg: null,
       status: null,
-      isTesting: false,
+      showSpinner: false,
     };
   },
   computed: {
@@ -88,9 +88,8 @@ export default {
       this.status = null;
     },
     onTest() {
-      this.isTesting = true;
+      this.showSpinner = true;
       this.runTest();
-      this.$root.$emit("loadLastTest", this.isTesting);
     },
     onBack() {
       this.$router.back();
@@ -102,13 +101,14 @@ export default {
         .then((response) => {
           this.status = response.status;
           this.errorMsg = null;
-          this.isTesting = false;
+          this.$root.$emit("loadLastTest")
+          this.showSpinner = false;
         })
         .catch((error) => {
           if (error.response) {
             this.status = error.response.status;
             this.errorMsg = error.response.data.Error[0];
-            this.isTesting = false;
+            this.showSpinner = false;
           }
         });
     },
@@ -118,7 +118,7 @@ export default {
       this.onChange();
     },
     onTest() {
-      this.isTesting = false;
+      this.showSpinner = false;
     }
   },
 };
