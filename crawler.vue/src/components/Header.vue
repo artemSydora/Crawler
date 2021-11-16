@@ -94,14 +94,12 @@ export default {
     onBack() {
       this.$router.back();
     },
-
     runTest() {
       axios
         .post(this.baseUri + "/tests", { Url: this.url })
         .then((response) => {
           this.status = response.status;
-          this.errorMsg = null;
-          this.$root.$emit("loadLastTest")
+          this.$root.$emit("loadLastTest");
           this.showSpinner = false;
         })
         .catch((error) => {
@@ -116,9 +114,6 @@ export default {
   watch: {
     url() {
       this.onChange();
-    },
-    onTest() {
-      this.showSpinner = false;
     }
   },
 };

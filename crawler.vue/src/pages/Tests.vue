@@ -57,6 +57,14 @@ import axios from "axios";
 
 export default {
   name: "Tests",
+  props: {
+    baseUri: {
+      type: String,
+      default() {
+        null;
+      }
+    }
+  },
   data() {
     return {
       tests: [],
@@ -94,7 +102,6 @@ export default {
       ],
     };
   },
-  props: ["baseUri"],
   computed: {
     totalRows() {
       return this.totalPages * this.pageSize;
@@ -115,7 +122,7 @@ export default {
     this.$root.$on("loadLastTest", () => {
       this.getTestsPage(this.currentPage);
     });
-  },
+  }
 };
 </script>
 
