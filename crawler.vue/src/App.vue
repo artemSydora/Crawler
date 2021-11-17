@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header :baseUri="baseUri"/>
-    <router-view :baseUri="baseUri"></router-view>
+    <Header />
+    <router-view></router-view>
     <Footer />
   </div>
 </template>
@@ -15,12 +15,7 @@ export default {
   components: {
     Header,
     Footer,
-  },
-  data() {
-    return {
-      baseUri: "http://crawler.api.loc/api",
-    };
-  },
+  }
 };
 </script>
 

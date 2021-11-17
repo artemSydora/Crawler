@@ -51,9 +51,7 @@ export default {
   props: {
     id: {
       type: String,
-      default() {
-        return null;
-      },
+      default: null
     },
     details: {
       type: Array,
@@ -63,15 +61,11 @@ export default {
     },
     tableTitle: {
       type: String,
-      default() {
-        return null;
-      },
+      default: null
     },
     errorMsg: {
       type: String,
-      default() {
-        return null;
-      },
+      default: null
     },
   },
   data() {

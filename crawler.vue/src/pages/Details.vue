@@ -48,7 +48,12 @@ export default {
       details: [],
     };
   },
-  props: ["testId", "baseUri", "userInput"],
+  props: {
+    testId: {
+      Type: String,
+      default: null
+    }
+  },
   computed: {
     onlySitemap() {
       return this.details.filter((x) => !x.inWebsite === true);
@@ -67,9 +72,9 @@ export default {
   },
   created() {
     axios
-      .get(this.baseUri + `/tests/${this.testId}/details`)
+      .get(axios.defaults.baseURL + `/tests/${this.testId}/details`)
       .then((response) => {
-        return (this.details = response.data);
+          return (this.details = response.data);
       });
   },
 };

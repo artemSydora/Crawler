@@ -59,14 +59,6 @@ import axios from "axios";
 
 export default {
   name: "Header",
-  props: {
-    baseUri: {
-      type: String,
-      default() {
-        return null;
-      },
-    },
-  },
   data() {
     return {
       url: "",
@@ -78,10 +70,7 @@ export default {
   computed: {
     validation() {
       return this.status === null ? null : this.status < 400 ? true : false;
-    },
-    input() {
-      return { userInput: { Url: this.url } };
-    },
+    }
   },
   methods: {
     onChange() {
@@ -96,7 +85,7 @@ export default {
     },
     runTest() {
       axios
-        .post(this.baseUri + "/tests", { Url: this.url })
+        .post(axios.defaults.baseURL + "/tests", { Url: this.url })
         .then((response) => {
           this.status = response.status;
           this.$root.$emit("loadLastTest");
@@ -105,7 +94,7 @@ export default {
         .catch((error) => {
           if (error.response) {
             this.status = error.response.status;
-            this.errorMsg = error.response.data.Error[0];
+            this.errorMsg = error.response.data?.Error[0];
             this.showSpinner = false;
           }
         });

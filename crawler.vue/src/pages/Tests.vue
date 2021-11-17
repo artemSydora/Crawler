@@ -57,21 +57,12 @@ import axios from "axios";
 
 export default {
   name: "Tests",
-  props: {
-    baseUri: {
-      type: String,
-      default() {
-        null;
-      }
-    }
-  },
   data() {
     return {
       tests: [],
       currentPage: 1,
       totalPages: 1,
       pageSize: 15,
-      needLoadLastTest: false,
       fields: [
         {
           key: "id",
@@ -110,10 +101,10 @@ export default {
   methods: {
     getTestsPage(currentPage) {
       axios
-        .get(this.baseUri + `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`)
+        .get(axios.defaults.baseURL + `/tests?pageNumber=${currentPage}&pageSize=${this.pageSize}`)
         .then((response) => {
-          this.tests = response.data.tests;
-          this.totalPages = response.data.totalPages;
+          this.tests = response.data?.tests;
+          this.totalPages = response.data?.totalPages;
         });
     },
   },

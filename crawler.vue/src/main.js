@@ -5,10 +5,13 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import router from './routes'
 import BootstrapVue from 'bootstrap-vue'
+import axios from "axios";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+axios.defaults.baseURL = 'http://crawler.api.loc/api';
 
 Vue.use(require('vue-moment'))
 Vue.use(VueRouter)
